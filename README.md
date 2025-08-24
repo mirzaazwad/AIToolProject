@@ -894,6 +894,11 @@ jobs:
         run: make install
       - name: Run tests with coverage
         run: make test
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
 
 ## Logging & Monitoring
