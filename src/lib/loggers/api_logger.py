@@ -13,16 +13,18 @@ class ApiLogger(BaseLogger):
     def __init__(self, level: str = "INFO"):
         super().__init__("api", "api.log", level)
 
-        if not hasattr(self, 'metrics'):
+        if not hasattr(self, "metrics"):
             self.metrics = APIMetrics()
-    
+
     def log_successful_call(self, log_data: SuccessfulAPICallLog) -> None:
         """Log successful API call using schema."""
         self.metrics.total_calls += 1
         self.metrics.successful_calls += 1
         self.metrics.total_response_time += log_data.response_time
         self._update_average_response_time()
-        self.info(f"{log_data.method} {log_data.url} - {log_data.response_code.value} {log_data.response_code.name} payload: {str(log_data.payload)[:50]+'...' if len(str(str(log_data.payload))) > 50 else str(log_data.payload)} ({log_data.response_time:.2f}s)")
+        self.info(
+            f"{log_data.method} {log_data.url} - {log_data.response_code.value} {log_data.response_code.name} payload: {str(log_data.payload)[:50]+'...' if len(str(str(log_data.payload))) > 50 else str(log_data.payload)} ({log_data.response_time:.2f}s)"
+        )
 
     def log_failed_call(self, log_data: FailedAPICallLog) -> None:
         """Log failed API call using schema."""
@@ -30,7 +32,9 @@ class ApiLogger(BaseLogger):
         self.metrics.failed_calls += 1
         self.metrics.total_response_time += log_data.response_time
         self._update_average_response_time()
-        self.error(f"{log_data.method} {log_data.url} - {log_data.error} {log_data.response_code.value} {log_data.response_code.name} payload: {str(log_data.payload)[:50]+'...' if len(str(str(log_data.payload))) > 50 else str(log_data.payload)} ({log_data.response_time:.2f}s)")
+        self.error(
+            f"{log_data.method} {log_data.url} - {log_data.error} {log_data.response_code.value} {log_data.response_code.name} payload: {str(log_data.payload)[:50]+'...' if len(str(str(log_data.payload))) > 50 else str(log_data.payload)} ({log_data.response_time:.2f}s)"
+        )
 
     def _update_average_response_time(self) -> None:
         """Update the average response time metric."""

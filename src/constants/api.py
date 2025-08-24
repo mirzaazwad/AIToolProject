@@ -2,6 +2,7 @@
 
 from enum import Enum
 
+
 class StatusCodes(Enum):
     OK = 200
     BAD_REQUEST = 400

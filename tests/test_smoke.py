@@ -1,15 +1,22 @@
 """Smoke Tests"""
+
 from tests.stubs.agent import AgentStub as Agent
 
 
 def test_ada_lovelace():
     out = Agent().answer("Who is Ada Lovelace?")
-    assert out == "Ada Lovelace was a 19th-century mathematician regarded as an early computing pioneer for her work on Charles Babbage's Analytical Engine."
+    assert (
+        out
+        == "Ada Lovelace was a 19th-century mathematician regarded as an early computing pioneer for her work on Charles Babbage's Analytical Engine."
+    )
 
 
 def test_alan_turing():
     out = Agent().answer("Who is Alan Turing?")
-    assert out == "Alan Turing was a mathematician and logician, widely considered to be the father of theoretical computer science and artificial intelligence."
+    assert (
+        out
+        == "Alan Turing was a mathematician and logician, widely considered to be the father of theoretical computer science and artificial intelligence."
+    )
 
 
 def test_calculator_addition():
@@ -27,17 +34,19 @@ def test_weather_summary():
     assert out.lower() in [
         "mild and cloudy.",
         "cloudy and mild.",
-        "partly cloudy skies."
+        "partly cloudy skies.",
     ]
 
 
 def test_contextual_weather_math():
-    out = Agent().answer("Add 10 to the average temperature in Paris and London right now.")
+    out = Agent().answer(
+        "Add 10 to the average temperature in Paris and London right now."
+    )
     assert out.endswith("°C")
-    assert float(out.replace("°C", "")) > 20.0  
+    assert float(out.replace("°C", "")) > 20.0
 
 
 def test_currency_conversion():
     out = Agent().answer("Convert the average of 10 and 20 USD into EUR.")
-    assert out=="12.9221"
+    assert out == "12.9221"
     assert float(out) > 0

@@ -29,7 +29,9 @@ class AgentStub(Agent):
 
     def _execute_single_tool(self, suggestion) -> Dict[str, Any]:
         """Execute a single tool and return a standardized response."""
-        tool_name = getattr(suggestion, "tool", None) or getattr(suggestion, "tool_name", None)
+        tool_name = getattr(suggestion, "tool", None) or getattr(
+            suggestion, "tool_name", None
+        )
         if not tool_name:
             return {"tool": None, "args": {}, "success": False, "result": None}
 
@@ -46,7 +48,7 @@ class AgentStub(Agent):
             "tool": tool_name,
             "args": args,
             "success": False,
-            "result": self._fallback_result(tool_name, args)
+            "result": self._fallback_result(tool_name, args),
         }
 
     @staticmethod
@@ -113,7 +115,9 @@ class AgentStub(Agent):
 
         result_str = response.get("result")
         if isinstance(result_str, str):
-            match = re.search(r"Weather\s+in\s+([A-Za-z\s]+):", result_str, re.IGNORECASE)
+            match = re.search(
+                r"Weather\s+in\s+([A-Za-z\s]+):", result_str, re.IGNORECASE
+            )
             if match:
                 return match.group(1).strip()
         return None
@@ -130,7 +134,9 @@ class AgentStub(Agent):
             executed.append(self._execute_single_tool(calc))
 
         if deferred:
-            new_plan = self._evaluate_calculator_dependencies(existing_responses + executed)
+            new_plan = self._evaluate_calculator_dependencies(
+                existing_responses + executed
+            )
             if new_plan and getattr(new_plan, "suggestions", []):
                 executed.extend(self.execute_tools(new_plan))
         return executed
@@ -140,9 +146,10 @@ class AgentStub(Agent):
         """Replace placeholders in a calculator expression with numeric values."""
         expr = str(expr)
         for placeholder, value in context.items():
-            expr = re.sub(rf"\b{re.escape(placeholder)}\b", str(value), expr, flags=re.IGNORECASE)
+            expr = re.sub(
+                rf"\b{re.escape(placeholder)}\b", str(value), expr, flags=re.IGNORECASE
+            )
         return expr
-
 
     def fuse_responses(self, responses: List[Dict[str, Any]], query: str) -> str:
         """Combine tool responses into a final answer."""
@@ -158,7 +165,6 @@ class AgentStub(Agent):
             if calculator_response:
                 return calculator_response
 
-
             weather_response = self._get_weather_responses(successful, query)
             if weather_response:
                 return weather_response
@@ -167,19 +173,23 @@ class AgentStub(Agent):
             if knowledge_base_response:
                 return knowledge_base_response
 
-
             return self._format_generic_responses(successful)
 
         except Exception:
             return FAILED_AGENT_MESSAGE
 
-
     def _get_last_calculator_result(self, responses, query):
-        calc_results = [r for r in responses if r.get("tool") == "calculator" and r.get("result") is not None]
+        calc_results = [
+            r
+            for r in responses
+            if r.get("tool") == "calculator" and r.get("result") is not None
+        ]
         if not calc_results:
             return None
         val = str(calc_results[-1]["result"])
-        if any(k in query.lower() for k in ["temperature", "weather"]) and not val.endswith("°C"):
+        if any(
+            k in query.lower() for k in ["temperature", "weather"]
+        ) and not val.endswith("°C"):
             val = f"{val}°C"
         return val
 
@@ -220,7 +230,13 @@ class AgentStub(Agent):
 
     @staticmethod
     def _format_generic_responses(responses):
-        results = [str(r.get("result")) for r in responses if r.get("result") is not None]
+        results = [
+            str(r.get("result")) for r in responses if r.get("result") is not None
+        ]
         if not results:
             return "No valid responses from tools."
-        return results[0] if len(results) == 1 else "\n".join(f"- {i+1}: {s}" for i, s in enumerate(results))
+        return (
+            results[0]
+            if len(results) == 1
+            else "\n".join(f"- {i+1}: {s}" for i, s in enumerate(results))
+        )

@@ -1,4 +1,5 @@
 """The application startup file"""
+
 import argparse
 import time
 import sys
@@ -14,8 +15,10 @@ from dotenv import load_dotenv
 from .lib.loggers import api_logger, tool_logger, agent_logger
 from .lib.agents.base import Agent
 
+
 class Application:
     """The application class"""
+
     def __init__(self):
         """Initialize the application"""
         load_dotenv()
@@ -23,7 +26,7 @@ class Application:
         self.question = None
         self.verbose = False
         self.parser = None
-        self.agent_type = None
+        self.agent_type = "gemini"
 
     def run(self):
         """Run the application"""
@@ -43,12 +46,11 @@ class Application:
         self.question = " ".join(args.question).strip()
         self.agent_type = args.agent.lower()
         self.verbose = args.verbose
-        
 
     def parse_arguments(self):
         """Parse the command line arguments"""
         self.parser = argparse.ArgumentParser(
-        description="""AI Tool-Using Agent System
+            description="""AI Tool-Using Agent System
 
         The following tools are available for use:
 
@@ -58,7 +60,7 @@ class Application:
         4. currency_converter - for currency conversion (args: {"from": "FROM_CURRENCY", "to": "TO_CURRENCY", "amount": number})
 
         Type 'python main.py -h' for more information.""",
-        formatter_class=argparse.RawDescriptionHelpFormatter
+            formatter_class=argparse.RawDescriptionHelpFormatter,
         )
         self.parser.add_argument(
             "question",
@@ -70,21 +72,23 @@ class Application:
             "What is 12.5%% of 243?"
             "Who is Ada Lovelace?"
             "What's the weather in Paris?"
-            "Convert 100 USD to EUR" """
+            "Convert 100 USD to EUR" """,
         )
         self.parser.add_argument(
-            "-a", "--agent",
+            "-a",
+            "--agent",
             type=str,
             default="gemini",
-            help="The agent to use. Options: gemini, openai, stub"
+            help="The agent to use. Options: gemini, openai, stub",
         )
         self.parser.add_argument(
-            "-v", "--verbose",
+            "-v",
+            "--verbose",
             action="store_true",
             help="""Print detailed execution metrics including:
                 - Execution time
                 - API call statistics
-                - Tool usage metrics"""
+                - Tool usage metrics""",
         )
 
     def validate_arguments(self):
@@ -104,8 +108,8 @@ class Application:
             self.agent = AgentStub()
         else:
             print(f"Unknown agent type: {self.agent_type}")
-            print(self.parser.format_help())
-            exit(1)
+            print("Using Gemini Agent instead.")
+            self.agent = GeminiAgent()
 
     def run_agent(self):
         """Run the agent"""
@@ -113,13 +117,14 @@ class Application:
         answer = self.agent.answer(self.question)
         end_time = time.time()
         return answer, end_time - start_time
-    
+
     def print_metrics(self, processing_time: float) -> None:
         """Print the execution metrics"""
         api_metrics = api_logger.get_metrics()
         tool_metrics = tool_logger.get_metrics()
         agent_metrics = agent_logger.get_metrics()
-        print(f"""
+        print(
+            f"""
             === Execution Metrics ===
             Execution time: {processing_time:.2f} seconds
             Successful API calls: {api_metrics.successful_calls}
@@ -129,9 +134,8 @@ class Application:
             Total LLM Processing Time: {agent_metrics.total_processing_time:.2f}s
             LLM Queries Processed: {agent_metrics.queries_processed}
             For More Details check the logs in the logs folder.
-        """)
-        
-
+        """
+        )
 
 
 def run_agent(question: str, agent_type: str = "gemini"):
@@ -146,9 +150,3 @@ def run_agent(question: str, agent_type: str = "gemini"):
     else:
         return f"Unknown agent type: {agent_type}"
     return agent.answer(question)
-
-
-
-
-
-

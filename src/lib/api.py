@@ -1,4 +1,5 @@
 """Generic API Client"""
+
 import requests
 import time
 from typing import Optional, Union
@@ -13,7 +14,12 @@ class ApiClient:
     with standardized logging and error handling.
     """
 
-    def __init__(self, base_url: str = "", default_headers: Optional[dict[str, str]] = None, timeout: int = 30):
+    def __init__(
+        self,
+        base_url: str = "",
+        default_headers: Optional[dict[str, str]] = None,
+        timeout: int = 30,
+    ):
         """
         Initialize the API client.
 
@@ -39,18 +45,33 @@ class ApiClient:
             merged.update(headers)
         return merged
 
-    def _log_success(self, url: str, method: str, response: requests.Response, payload: Optional[dict[str, Union[str, int, float, bool, list, dict]]], elapsed: float) -> None:
+    def _log_success(
+        self,
+        url: str,
+        method: str,
+        response: requests.Response,
+        payload: Optional[dict[str, Union[str, int, float, bool, list, dict]]],
+        elapsed: float,
+    ) -> None:
         """Log successful API call."""
         log_data = SuccessfulAPICallLog(
             url=url,
             method=method,
             response_code=response.status_code,
             response_time=elapsed,
-            payload=payload
+            payload=payload,
         )
         api_logger.log_successful_call(log_data)
 
-    def _log_failure(self, url: str, method: str, error: str, payload: Optional[dict[str, Union[str, int, float, bool, list, dict]]], status_code: int, elapsed: float) -> None:
+    def _log_failure(
+        self,
+        url: str,
+        method: str,
+        error: str,
+        payload: Optional[dict[str, Union[str, int, float, bool, list, dict]]],
+        status_code: int,
+        elapsed: float,
+    ) -> None:
         """Log failed API call."""
         log_data = FailedAPICallLog(
             url=url,
@@ -58,15 +79,24 @@ class ApiClient:
             method=method,
             payload=payload,
             response_code=status_code,
-            response_time=elapsed
+            response_time=elapsed,
         )
         api_logger.log_failed_call(log_data)
 
     def _handle_request_exception(self, e: requests.RequestException) -> int:
         """Extract status code from exception if available."""
-        return getattr(e.response, "status_code", 500) if hasattr(e, "response") and e.response else 500
+        return (
+            getattr(e.response, "status_code", 500)
+            if hasattr(e, "response") and e.response
+            else 500
+        )
 
-    def get(self, endpoint: str, params: Optional[dict[str, Union[str, int, float]]] = None, headers: Optional[dict[str, str]] = None) -> requests.Response:
+    def get(
+        self,
+        endpoint: str,
+        params: Optional[dict[str, Union[str, int, float]]] = None,
+        headers: Optional[dict[str, str]] = None,
+    ) -> requests.Response:
         """
         Perform a GET request.
 
@@ -86,27 +116,35 @@ class ApiClient:
         start_time = time.time()
 
         try:
-            response = requests.get(url, params=params, headers=request_headers, timeout=self.timeout)
+            response = requests.get(
+                url, params=params, headers=request_headers, timeout=self.timeout
+            )
             elapsed = time.time() - start_time
             payload = params
 
             if response.status_code < StatusCodes.BAD_REQUEST.value:
                 self._log_success(url, "GET", response, payload, elapsed)
             else:
-                self._log_failure(url, "GET", response.text, payload, response.status_code, elapsed)
+                self._log_failure(
+                    url, "GET", response.text, payload, response.status_code, elapsed
+                )
 
             return response
         except requests.RequestException as e:
             elapsed = time.time() - start_time
             status_code = self._handle_request_exception(e)
             self._log_failure(url, "GET", str(e), params, status_code, elapsed)
-            raise requests.RequestException(f"GET request failed for {url}: {str(e)}") from e
+            raise requests.RequestException(
+                f"GET request failed for {url}: {str(e)}"
+            ) from e
 
-    def post(self,
-             endpoint: str,
-             data: Optional[Union[dict[str, Union[str, int, float]], str]] = None,
-             json_data: Optional[dict[str, Union[str, int, float, bool, list, dict]]] = None,
-             headers: Optional[dict[str, str]] = None) -> requests.Response:
+    def post(
+        self,
+        endpoint: str,
+        data: Optional[Union[dict[str, Union[str, int, float]], str]] = None,
+        json_data: Optional[dict[str, Union[str, int, float, bool, list, dict]]] = None,
+        headers: Optional[dict[str, str]] = None,
+    ) -> requests.Response:
         """
         Perform a POST request.
 
@@ -132,14 +170,27 @@ class ApiClient:
         start_time = time.time()
 
         try:
-            response = requests.post(url, data=data, json=json_data, headers=request_headers, timeout=self.timeout)
+            response = requests.post(
+                url,
+                data=data,
+                json=json_data,
+                headers=request_headers,
+                timeout=self.timeout,
+            )
             elapsed = time.time() - start_time
             payload_dict = payload if isinstance(payload, dict) else None
 
             if response.status_code < StatusCodes.BAD_REQUEST.value:
                 self._log_success(url, "POST", response, payload_dict, elapsed)
             else:
-                self._log_failure(url, "POST", response.text, payload_dict, response.status_code, elapsed)
+                self._log_failure(
+                    url,
+                    "POST",
+                    response.text,
+                    payload_dict,
+                    response.status_code,
+                    elapsed,
+                )
 
             return response
         except requests.RequestException as e:
@@ -147,7 +198,9 @@ class ApiClient:
             status_code = self._handle_request_exception(e)
             payload_dict = payload if isinstance(payload, dict) else None
             self._log_failure(url, "POST", str(e), payload_dict, status_code, elapsed)
-            raise requests.RequestException(f"POST request failed for {url}: {str(e)}") from e
+            raise requests.RequestException(
+                f"POST request failed for {url}: {str(e)}"
+            ) from e
 
     def set_default_headers(self, headers: dict[str, str]) -> None:
         """Set global default headers for requests."""

@@ -1,4 +1,5 @@
 """Constants for LLM Sending and Receiving Messages"""
+
 FAILED_AGENT_MESSAGE = "Sorry I am unable to answer your query at this moment."
 
 TOOL_SUGGESTION_FORMAT = """

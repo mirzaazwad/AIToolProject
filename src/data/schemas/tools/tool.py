@@ -1,4 +1,5 @@
 """Schema for Tool Suggestion"""
+
 from typing import Union
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 import json
@@ -17,6 +18,7 @@ class ToolArgument(BaseModel):
 
 class CalculatorArgs(ToolArgument):
     """Arguments for calculator tool."""
+
     expr: str = Field(..., description="Mathematical expression to evaluate")
 
     @field_validator("expr")
@@ -29,6 +31,7 @@ class CalculatorArgs(ToolArgument):
 
 class WeatherArgs(ToolArgument):
     """Arguments for weather tool."""
+
     city: str = Field(..., description="City name for weather information")
 
     @field_validator("city")
@@ -41,6 +44,7 @@ class WeatherArgs(ToolArgument):
 
 class KnowledgeBaseArgs(ToolArgument):
     """Arguments for knowledge base tool."""
+
     query: str = Field(..., alias="q", description="Query for knowledge base search")
 
     @field_validator("query")
@@ -55,6 +59,7 @@ class KnowledgeBaseArgs(ToolArgument):
 
 class CurrencyConverterArgs(ToolArgument):
     """Arguments for currency converter tool."""
+
     from_currency: str = Field(..., alias="from", description="Source currency code")
     to_currency: str = Field(..., alias="to", description="Target currency code")
     amount: float = Field(..., gt=0, description="Amount to convert")
@@ -71,9 +76,12 @@ class CurrencyConverterArgs(ToolArgument):
 
 class ToolSuggestion(BaseModel):
     """Represents a single tool suggestion."""
+
     tool: str = Field(..., description="Name of the tool to execute")
     args: ToolArgs = Field(default_factory=dict, description="Arguments for the tool")
-    depends_on: list[str] = Field(default_factory=list, description="List of tools that this tool depends on")
+    depends_on: list[str] = Field(
+        default_factory=list, description="List of tools that this tool depends on"
+    )
 
     @field_validator("tool")
     @classmethod
@@ -83,31 +91,32 @@ class ToolSuggestion(BaseModel):
 
         valid_tools = {"calculator", "weather", "knowledge_base", "currency_converter"}
         if v not in valid_tools:
-            raise ValueError(f"Unknown tool: {v}. Valid tools: {', '.join(valid_tools)}")
+            raise ValueError(
+                f"Unknown tool: {v}. Valid tools: {', '.join(valid_tools)}"
+            )
 
         return v
 
     def to_dict(self) -> ToolSuggestionDict:
         """Convert to dictionary representation."""
-        return {
-            "tool": self.tool,
-            "args": self.args,
-            "depends_on": self.depends_on
-        }
+        return {"tool": self.tool, "args": self.args, "depends_on": self.depends_on}
 
     @classmethod
-    def from_dict(cls, data: ToolSuggestionDict) -> 'ToolSuggestion':
+    def from_dict(cls, data: ToolSuggestionDict) -> "ToolSuggestion":
         """Create ToolSuggestion from dictionary."""
         return cls(
             tool=data.get("tool", ""),
             args=data.get("args", {}),
-            depends_on=data.get("depends_on", [])
+            depends_on=data.get("depends_on", []),
         )
 
 
 class ToolPlan(BaseModel):
     """Represents a plan with multiple tool suggestions."""
-    suggestions: list[ToolSuggestion] = Field(default_factory=list, description="List of tool suggestions")
+
+    suggestions: list[ToolSuggestion] = Field(
+        default_factory=list, description="List of tool suggestions"
+    )
 
     @field_validator("suggestions")
     @classmethod
@@ -127,13 +136,13 @@ class ToolPlan(BaseModel):
         return [suggestion.to_dict() for suggestion in self.suggestions]
 
     @classmethod
-    def from_list(cls, data: list[ToolSuggestionDict]) -> 'ToolPlan':
+    def from_list(cls, data: list[ToolSuggestionDict]) -> "ToolPlan":
         """Create ToolPlan from list of dictionaries."""
         suggestions = [ToolSuggestion.from_dict(item) for item in data]
         return cls(suggestions=suggestions)
 
     @classmethod
-    def from_json_string(cls, json_str: str) -> 'ToolPlan':
+    def from_json_string(cls, json_str: str) -> "ToolPlan":
         """Create ToolPlan from JSON string."""
         try:
             data = json.loads(json_str)
@@ -159,42 +168,29 @@ class ToolPlan(BaseModel):
         return self.suggestions[index]
 
 
-
 def create_calculator_suggestion(expression: str) -> ToolSuggestion:
     """Create a calculator tool suggestion."""
     args = CalculatorArgs(expr=expression)
-    return ToolSuggestion(
-        tool="calculator",
-        args=args.model_dump()
-    )
+    return ToolSuggestion(tool="calculator", args=args.model_dump())
 
 
 def create_weather_suggestion(city: str) -> ToolSuggestion:
     """Create a weather tool suggestion."""
     args = WeatherArgs(city=city)
-    return ToolSuggestion(
-        tool="weather",
-        args=args.model_dump()
-    )
+    return ToolSuggestion(tool="weather", args=args.model_dump())
 
 
 def create_knowledge_base_suggestion(query: str) -> ToolSuggestion:
     """Create a knowledge base tool suggestion."""
     args = KnowledgeBaseArgs(query=query)
-    return ToolSuggestion(
-        tool="knowledge_base",
-        args=args.model_dump()
-    )
+    return ToolSuggestion(tool="knowledge_base", args=args.model_dump())
 
 
-def create_currency_converter_suggestion(from_currency: str, to_currency: str, amount: float) -> ToolSuggestion:
+def create_currency_converter_suggestion(
+    from_currency: str, to_currency: str, amount: float
+) -> ToolSuggestion:
     """Create a currency converter tool suggestion."""
     args = CurrencyConverterArgs(
-        from_currency=from_currency,
-        to_currency=to_currency,
-        amount=amount
+        from_currency=from_currency, to_currency=to_currency, amount=amount
     )
-    return ToolSuggestion(
-        tool="currency_converter",
-        args=args.model_dump()
-    )
+    return ToolSuggestion(tool="currency_converter", args=args.model_dump())

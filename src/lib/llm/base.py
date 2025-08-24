@@ -1,9 +1,15 @@
 """Abstract Base Class for LLM Strategies"""
+
 from abc import ABC, abstractmethod
 from ..api import ApiClient
 from ...data.schemas.tools.tool import ToolPlan
-from ...constants.llm import SYSTEM_PROMPT_CONTEXT, TOOL_SUGGESTION_EXAMPLES, TOOL_SYSTEM_ROLE
+from ...constants.llm import (
+    SYSTEM_PROMPT_CONTEXT,
+    TOOL_SUGGESTION_EXAMPLES,
+    TOOL_SYSTEM_ROLE,
+)
 from ...constants.messages import TOOL_SUGGESTION_FORMAT
+
 
 class LLMStrategy(ABC):
     """Abstract base class for LLM strategies using Strategy Pattern"""
@@ -36,7 +42,7 @@ class LLMStrategy(ABC):
         """
         pass
 
-    def _get_system_prompt(self,prompt:str) -> str:
+    def _get_system_prompt(self, prompt: str) -> str:
         """
         Get the system prompt for the LLM.
         """

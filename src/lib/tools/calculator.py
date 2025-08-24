@@ -1,10 +1,11 @@
 """Calculator Tool"""
+
 from .base import Action
 from ..errors.tools.calculator import (
     ExpressionError,
     TokenizationError,
     EvaluationError,
-    BracketMismatchError
+    BracketMismatchError,
 )
 
 
@@ -27,13 +28,12 @@ class Calculator(Action):
         result = self._eval_postfix(postfix)
         return str(result)
 
-
     def _tokenize(self, expr: str) -> list[str]:
         """Tokenize mathematical expression into numbers and operators."""
         tokens = []
         num = ""
         for ch in expr:
-            if ch.isdigit() or ch == ".": 
+            if ch.isdigit() or ch == ".":
                 num += ch
             else:
                 if num:
@@ -51,10 +51,10 @@ class Calculator(Action):
 
     def _to_postfix(self, tokens: list[str]) -> list[str]:
         """Convert infix tokens to postfix notation using Shunting Yard algorithm."""
-        precedence = {"+": 1, "-": 1, "*": 2, "/": 2, "%": 2, "^": 3}
         output = []
         stack = []
 
+        precedence = {"+": 1, "-": 1, "*": 2, "/": 2, "%": 2, "^": 3}
         opening = {"(": ")", "{": "}", "[": "]"}
         closing = {")": "(", "}": "{", "]": "["}
 
@@ -62,8 +62,11 @@ class Calculator(Action):
             if token.replace(".", "", 1).isdigit():
                 output.append(token)
             elif token in precedence:
-                while (stack and stack[-1] in precedence and
-                       precedence[stack[-1]] >= precedence[token]):
+                while (
+                    stack
+                    and stack[-1] in precedence
+                    and precedence[stack[-1]] >= precedence[token]
+                ):
                     output.append(stack.pop())
                 stack.append(token)
             elif token in opening:
@@ -73,7 +76,7 @@ class Calculator(Action):
                     output.append(stack.pop())
                 if not stack:
                     raise BracketMismatchError("Mismatched closing bracket")
-                stack.pop()  
+                stack.pop()
             else:
                 raise TokenizationError(f"Unknown token: '{token}'")
 
@@ -83,7 +86,6 @@ class Calculator(Action):
             output.append(stack.pop())
 
         return output
-
 
     def _eval_postfix(self, postfix: list[str]) -> float:
         """Evaluate postfix expression and return the result."""
@@ -117,7 +119,7 @@ class Calculator(Action):
                             raise EvaluationError("Modulo by zero")
                         stack.append(a % b)
                     elif token == "^":
-                        stack.append(a ** b)
+                        stack.append(a**b)
                     else:
                         raise EvaluationError(f"Unknown operator: '{token}'")
                 except (OverflowError, ZeroDivisionError) as e:
@@ -127,5 +129,3 @@ class Calculator(Action):
             raise EvaluationError("Invalid expression: multiple results")
 
         return stack[0]
-
-

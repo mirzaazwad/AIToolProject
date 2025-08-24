@@ -1,4 +1,5 @@
 """Schema for Knowledge Base"""
+
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from typing import Optional
 import json
@@ -6,6 +7,7 @@ import json
 
 class KnowledgeEntry(BaseModel):
     """Represents a single knowledge base entry."""
+
     name: str = Field(..., description="Name of the person/entity")
     summary: str = Field(..., description="Summary/description of the entry")
     category: Optional[str] = Field(default=None, description="Optional category")
@@ -26,11 +28,7 @@ class KnowledgeEntry(BaseModel):
 
     def to_dict(self) -> dict[str, Optional[str]]:
         """Convert to dictionary representation."""
-        return {
-            "name": self.name,
-            "summary": self.summary,
-            "category": self.category
-        }
+        return {"name": self.name, "summary": self.summary, "category": self.category}
 
     @classmethod
     def from_dict(cls, data: dict[str, Optional[str]]) -> "KnowledgeEntry":
@@ -38,7 +36,7 @@ class KnowledgeEntry(BaseModel):
         return cls(
             name=data.get("name", ""),
             summary=data.get("summary", ""),
-            category=data.get("category")
+            category=data.get("category"),
         )
 
     def get_characters(self) -> set[str]:
@@ -50,7 +48,10 @@ class KnowledgeEntry(BaseModel):
 
 class KnowledgeBase(BaseModel):
     """Represents the entire knowledge base with search capabilities."""
-    entries: list[KnowledgeEntry] = Field(default_factory=list, description="List of knowledge entries")
+
+    entries: list[KnowledgeEntry] = Field(
+        default_factory=list, description="List of knowledge entries"
+    )
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -68,9 +69,7 @@ class KnowledgeBase(BaseModel):
 
     def to_json_file(self, file_path: str) -> None:
         """Save knowledge base to JSON file."""
-        data = {
-            "entries": [entry.to_dict() for entry in self.entries]
-        }
+        data = {"entries": [entry.to_dict() for entry in self.entries]}
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
@@ -80,11 +79,13 @@ class KnowledgeBase(BaseModel):
             return 0.0
         return len(set1 & set2) / len(set1 | set2)
 
-    def search(self, query: str, threshold: float = 0.1, max_results: int = 5) -> list[tuple[KnowledgeEntry, float]]:
+    def search(
+        self, query: str, threshold: float = 0.1, max_results: int = 5
+    ) -> list[tuple[KnowledgeEntry, float]]:
         """
         Search for entries using character-based Jaccard similarity.
         """
-        query_characters = set(query.lower()) 
+        query_characters = set(query.lower())
 
         results = []
         for entry in self.entries:

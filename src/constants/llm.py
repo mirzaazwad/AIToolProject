@@ -1,10 +1,11 @@
 """Constants for LLMs"""
-GEMINI_API_URL="https://generativelanguage.googleapis.com/v1beta/models"
-GEMINI_MODEL="gemini-2.0-flash"
-OPENAI_API_URL="https://api.openai.com/v1"
-OPENAI_MODEL="gpt-3.5-turbo"
 
-FUSE_FORMAT_MESSAGE="""
+GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models"
+GEMINI_MODEL = "gemini-2.0-flash"
+OPENAI_API_URL = "https://api.openai.com/v1"
+OPENAI_MODEL = "gpt-3.5-turbo"
+
+FUSE_FORMAT_MESSAGE = """
             - For calculations: return only the numeric result (float or int).
             - For knowledge base queries: return short factual answers.
             - For weather: return temperature and/or conditions with units.
@@ -48,7 +49,7 @@ TOOL_SYSTEM_ROLE = """
         You are an agent tasked with suggesting appropriate tools to answer the query.
         """
 
-SYSTEM_PROMPT_CONTEXT="""
+SYSTEM_PROMPT_CONTEXT = """
         For the prompt provided, you have to suggest appropriate tools to answer the query.
         The tools available are:
         1. calculator - for mathematical calculations (args: {{"expr": "expression"}})

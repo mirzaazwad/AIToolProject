@@ -28,8 +28,12 @@ class Agent(ABC):
         try:
             processed_query = self.preprocess_query(query)
             tool_plan = self.get_tool_suggestions(processed_query)
-            self.tool_plan = [suggestion.model_dump() for suggestion in tool_plan.suggestions]
-            agent_logger.log_tool_plan([suggestion.model_dump() for suggestion in tool_plan.suggestions])
+            self.tool_plan = [
+                suggestion.model_dump() for suggestion in tool_plan.suggestions
+            ]
+            agent_logger.log_tool_plan(
+                [suggestion.model_dump() for suggestion in tool_plan.suggestions]
+            )
 
             tool_responses = self.execute_tools(tool_plan)
             processed_responses = self.postprocess_responses(tool_responses)
@@ -48,7 +52,7 @@ class Agent(ABC):
     def get_tool_suggestions(self, query: str) -> ToolPlan:
         """Get tool suggestions from the LLM strategy."""
         return self.llm_strategy.refine(query)
-    
+
     def to_string(self, tool_plan: ToolPlan) -> str:
         """Convert tool plan to string."""
         return tool_plan.model_dump_json()
@@ -63,7 +67,11 @@ class Agent(ABC):
         should_try_again: bool = False
         for suggestion in tool_plan.suggestions:
             has_depends_on = len(suggestion.depends_on) > 0
-            if has_multiple_plans and has_depends_on and suggestion.tool == "calculator":
+            if (
+                has_multiple_plans
+                and has_depends_on
+                and suggestion.tool == "calculator"
+            ):
                 should_try_again = True
                 continue
             response = self._execute_single_tool(suggestion)
@@ -74,12 +82,23 @@ class Agent(ABC):
             responses.extend(self.execute_tools(new_tool_plan))
 
         return responses
-    
-    def _evaluate_calculator_dependencies(self, responses: list[ToolResponse]) -> ToolPlan:
+
+    def _evaluate_calculator_dependencies(
+        self, responses: list[ToolResponse]
+    ) -> ToolPlan:
         """Evaluate depends_on for calculator tools."""
-        response_summary = "Based on these results: " + "; ".join(str(responses)) + ". What calculations should be performed?"
+        response_summary = (
+            "Based on these results: "
+            + "; ".join(str(responses))
+            + ". What calculations should be performed?"
+        )
         tool_plan_for_calculators = self.get_tool_suggestions(response_summary)
-        self.tool_plan.extend([suggestion.model_dump() for suggestion in tool_plan_for_calculators.suggestions])
+        self.tool_plan.extend(
+            [
+                suggestion.model_dump()
+                for suggestion in tool_plan_for_calculators.suggestions
+            ]
+        )
         return tool_plan_for_calculators
 
     def _execute_single_tool(self, suggestion: ToolSuggestion) -> ToolResponse:
@@ -93,7 +112,7 @@ class Agent(ABC):
                 args=suggestion.args,
                 result=result,
                 success=True,
-                error=None
+                error=None,
             )
 
         except Exception as e:
@@ -102,14 +121,16 @@ class Agent(ABC):
                 args=suggestion.args,
                 result=None,
                 success=False,
-                error=str(e)
+                error=str(e),
             )
 
     def preprocess_query(self, query: str) -> str:
         """Hook method for preprocessing the query. Default: no preprocessing."""
         return query.strip().lower()
 
-    def postprocess_responses(self, responses: list[ToolResponse]) -> list[ToolResponse]:
+    def postprocess_responses(
+        self, responses: list[ToolResponse]
+    ) -> list[ToolResponse]:
         """Hook method for post-processing tool responses. Default: no post-processing."""
         return responses
 
@@ -120,10 +141,12 @@ class Agent(ABC):
         """
         response_text = "\n".join(
             f"- Response {i+1}: {response.get_result_or_error()}"
-            for i, response in enumerate(responses) if response.is_successful()
+            for i, response in enumerate(responses)
+            if response.is_successful()
         )
 
-        answer = self.llm_strategy.query(f"""
+        answer = self.llm_strategy.query(
+            f"""
             You are an agent tasked with fusing tool responses into a single final answer.
 
             Tools Used:
@@ -137,12 +160,7 @@ class Agent(ABC):
 
             Formatting Rules:
             {FUSE_FORMAT_MESSAGE}
-        """).strip()
+        """
+        ).strip()
 
         return answer
-
-
-
-                                
-
-        

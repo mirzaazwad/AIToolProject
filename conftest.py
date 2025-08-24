@@ -12,7 +12,7 @@ project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
 
-if 'PYTHONPATH' in os.environ:
-    os.environ['PYTHONPATH'] = f"{project_root}:{os.environ['PYTHONPATH']}"
+if "PYTHONPATH" in os.environ:
+    os.environ["PYTHONPATH"] = f"{project_root}:{os.environ['PYTHONPATH']}"
 else:
-    os.environ['PYTHONPATH'] = str(project_root)
+    os.environ["PYTHONPATH"] = str(project_root)

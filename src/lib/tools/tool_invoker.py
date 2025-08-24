@@ -1,4 +1,5 @@
 """Tool Invoker using Command Pattern"""
+
 from .calculator import Calculator
 from .weather import Weather
 from .knowledge_base import KnowledgeBase
@@ -9,6 +10,7 @@ from ..loggers import tool_logger
 from typing import Union
 import time
 from ..errors.tools.invoker import InvokerError
+
 
 class ToolInvoker(ToolInvokerBase):
     """Invoker class for executing tools using Command Pattern"""
@@ -30,7 +32,7 @@ class ToolInvoker(ToolInvokerBase):
 
     def execute(self, args: dict[str, Union[str, float, int]]) -> str:
         """Execute the current tool with logging."""
-        if not hasattr(self, '_ToolInvoker__action'):
+        if not hasattr(self, "_ToolInvoker__action"):
             raise RuntimeError("No tool action set. Call set_action() first.")
 
         tool_logger.log_tool_call(self.__current_tool, args)
@@ -49,7 +51,3 @@ class ToolInvoker(ToolInvokerBase):
 
             tool_logger.log_tool_failure(self.__current_tool, str(e), error_type)
             raise InvokerError(f"Tool execution failed: {str(e)}") from e
-        
-
-
-    

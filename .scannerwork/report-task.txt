@@ -1,6 +1,6 @@
-projectKey=Optimizely_Assignment
+projectKey=AIToolProject
 serverUrl=http://localhost:4000
 serverVersion=9.9.8.100196
-dashboardUrl=http://localhost:4000/dashboard?id=Optimizely_Assignment
-ceTaskId=AZjc_V6osNzxq4W7H_ay
-ceTaskUrl=http://localhost:4000/api/ce/task?id=AZjc_V6osNzxq4W7H_ay
+dashboardUrl=http://localhost:4000/dashboard?id=AIToolProject
+ceTaskId=AZjdOTHZ3D-VmC99uOFV
+ceTaskUrl=http://localhost:4000/api/ce/task?id=AZjdOTHZ3D-VmC99uOFV

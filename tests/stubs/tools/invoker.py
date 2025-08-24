@@ -1,4 +1,5 @@
 """Stub for ToolInvoker"""
+
 from src.lib.tools.calculator import Calculator
 from .weather import MockWeather as Weather
 from src.lib.tools.knowledge_base import KnowledgeBase
@@ -8,6 +9,7 @@ from src.constants.tools import Tool
 from src.lib.loggers import tool_logger
 import time
 from src.lib.errors.tools.invoker import InvokerError
+
 
 class StubToolInvoker(ToolInvokerBase):
     def __init__(self):
@@ -19,7 +21,7 @@ class StubToolInvoker(ToolInvokerBase):
         if tool_type == Tool.CALCULATOR.value:
             self._action = Calculator()
         elif tool_type == Tool.WEATHER.value:
-            self._action = Weather()  # Ensure execute exists
+            self._action = Weather()
         elif tool_type == Tool.KNOWLEDGE_BASE.value:
             self._action = KnowledgeBase()
         elif tool_type == Tool.CURRENCY_CONVERTER.value:

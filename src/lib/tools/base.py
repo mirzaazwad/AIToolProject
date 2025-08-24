@@ -1,14 +1,19 @@
 """Abstract Base Classes for Tools and Invoker using Command Pattern"""
+
 from abc import ABC, abstractmethod
+
 
 class Action(ABC):
     """Abstract base class for tool actions using Command Pattern"""
+
     @abstractmethod
     def execute(self, args: dict) -> str:
         pass
 
+
 class ToolInvokerBase(ABC):
     """Abstract invoker base class for executing tools using Command Pattern"""
+
     _action: Action
     _current_tool: str
 
@@ -21,7 +26,3 @@ class ToolInvokerBase(ABC):
     def execute(self, args: dict) -> str:
         """Execute the current tool with logging."""
         pass
-        
-
-
-    

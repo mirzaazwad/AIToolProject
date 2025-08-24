@@ -1,8 +1,14 @@
 """Knowledge Base Tool"""
+
 from .base import Action
 from ...data.schemas.tools.knowledge_base import KnowledgeBase as knowledge_baseSchema
 
-from ..errors.tools.knowledge_base import RetrievalError, QueryError, InsertionError, LoadingError
+from ..errors.tools.knowledge_base import (
+    RetrievalError,
+    QueryError,
+    InsertionError,
+    LoadingError,
+)
 from ...data.schemas.tools.knowledge_base import KnowledgeEntry
 import os
 
@@ -18,10 +24,11 @@ class KnowledgeBase(Action):
             knowledge_base_file_path: Path to the knowledge base JSON file
         """
         if knowledge_base_file_path is None:
-            # Default path relative to the src directory
             current_dir = os.path.dirname(os.path.abspath(__file__))
             src_dir = os.path.dirname(os.path.dirname(current_dir))
-            self.knowledge_base_file_path = os.path.join(src_dir, "data", "knowledge_base.json")
+            self.knowledge_base_file_path = os.path.join(
+                src_dir, "data", "knowledge_base.json"
+            )
         else:
             self.knowledge_base_file_path = knowledge_base_file_path
         self._load_knowledge_base()
@@ -30,10 +37,14 @@ class KnowledgeBase(Action):
         """Load the knowledge base from file."""
         try:
             if os.path.exists(self.knowledge_base_file_path):
-                self.knowledge_base = knowledge_baseSchema.from_json_file(self.knowledge_base_file_path)
+                self.knowledge_base = knowledge_baseSchema.from_json_file(
+                    self.knowledge_base_file_path
+                )
             else:
                 self.knowledge_base = knowledge_baseSchema(entries=[])
-                print(f"Warning: Knowledge base file {self.knowledge_base_file_path} not found. Created empty knowledge_base.")
+                print(
+                    f"Warning: Knowledge base file {self.knowledge_base_file_path} not found. Created empty knowledge_base."
+                )
         except Exception as e:
             self.knowledge_base = knowledge_baseSchema(entries=[])
             raise LoadingError(f"Error loading knowledge base: {str(e)}")
@@ -54,11 +65,13 @@ class KnowledgeBase(Action):
         query = args["query"]
         if not query or not isinstance(query, str):
             raise QueryError(f"Query must be a non-empty string")
-        search_result = self.search(query)    
+        search_result = self.search(query)
         most_relevant_entry = search_result[0]
         return most_relevant_entry
 
-    def search(self, query: str, threshold: float = 0.1, max_results: int = 3) -> list[KnowledgeEntry]:
+    def search(
+        self, query: str, threshold: float = 0.1, max_results: int = 3
+    ) -> list[KnowledgeEntry]:
         """
         Search knowledge base using character-based Jaccard similarity.
 
@@ -73,7 +86,9 @@ class KnowledgeBase(Action):
         if not query.strip():
             raise QueryError(f"Empty query provided")
 
-        results = self.knowledge_base.search(query, threshold=threshold, max_results=max_results)
+        results = self.knowledge_base.search(
+            query, threshold=threshold, max_results=max_results
+        )
 
         if not results:
             raise RetrievalError(f"No entries found for query: '{query}'")
@@ -82,7 +97,7 @@ class KnowledgeBase(Action):
         for entry, _ in results:
             entries.append(entry)
 
-        if(len(entries) > 0):
+        if len(entries) > 0:
             return entries
 
         raise RetrievalError(f"No entries found for query: '{query}'")
@@ -98,7 +113,7 @@ class KnowledgeBase(Action):
 
         entries = []
         for entry in self.knowledge_base.entries:
-            entries.append({ "entry": entry.name, "summary": entry.summary })
+            entries.append({"entry": entry.name, "summary": entry.summary})
 
         return entries
 
