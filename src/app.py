@@ -10,7 +10,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from .lib.agents.gemini import GeminiAgent
 from .lib.agents.openai import OpenAIAgent
-from tests.stubs.agent import AgentStub
 from dotenv import load_dotenv
 from .lib.loggers import api_logger, tool_logger, agent_logger
 from .lib.agents.base import Agent
@@ -79,7 +78,7 @@ class Application:
             "--agent",
             type=str,
             default="gemini",
-            help="The agent to use. Options: gemini, openai, stub",
+            help="The agent to use. Options: gemini, openai",
         )
         self.parser.add_argument(
             "-v",
@@ -104,8 +103,6 @@ class Application:
             self.agent = GeminiAgent()
         elif self.agent_type == "openai":
             self.agent = OpenAIAgent()
-        elif self.agent_type == "stub":
-            self.agent = AgentStub()
         else:
             print(f"Unknown agent type: {self.agent_type}")
             print("Using Gemini Agent instead.")
@@ -136,17 +133,3 @@ class Application:
             For More Details check the logs in the logs folder.
         """
         )
-
-
-def run_agent(question: str, agent_type: str = "gemini"):
-    """Run the agent with the given question and return the answer."""
-    agent: Agent = None
-    if agent_type == "gemini":
-        agent = GeminiAgent()
-    elif agent_type == "openai":
-        agent = OpenAIAgent()
-    elif agent_type == "stub":
-        agent = AgentStub()
-    else:
-        return f"Unknown agent type: {agent_type}"
-    return agent.answer(question)

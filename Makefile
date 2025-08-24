@@ -10,7 +10,7 @@ test:
 	pytest --cov=. tests/ --cov-report=xml
 
 run:
-	$(PY) main.py "What is 12.5% of 243?"
+	$(PY) main.py "What is 12.5% of 243?" -a gemini -v
 
 sonar:
 	sonar-scanner   -Dsonar.projectKey=AIToolProject   -Dsonar.sources=.   -Dsonar.host.url=http://localhost:4000   -Dsonar.login=$$SONAR_TOKEN

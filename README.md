@@ -77,11 +77,6 @@ graph TB
     APIClient --> CurrencyAPI
     GeminiLLM --> GeminiAPI
     OpenAILLM --> OpenAIAPI
-
-    style Agent fill:#e1f5fe
-    style ToolInvoker fill:#f3e5f5
-    style APIClient fill:#fff3e0
-    style Logging fill:#e8f5e8
 ```
 
 ## Design Patterns
@@ -208,80 +203,59 @@ The project includes a comprehensive Makefile for automated development workflow
 
 ```bash
 # Development Setup
-make install          # Install all dependencies
-make setup-dev        # Set up development environment
-make clean           # Clean all generated files
+make setup           # Create virtual environment and install dependencies
 
 # Testing
-make test            # Run all tests with coverage
-make test-verbose    # Run tests with detailed output
-make test-unit       # Run only unit tests
-make test-integration # Run only integration tests
-make coverage        # Generate coverage report
-make coverage-html   # Generate HTML coverage report
+make test            # Run all tests with coverage (generates XML report)
 
 # Code Quality
-make lint            # Run code linting
-make format          # Format code with black
-make type-check      # Run type checking with mypy
-make sonar           # Run SonarQube analysis
+make fmt             # Format code with black
+make sonar           # Run SonarQube analysis (requires SONAR_TOKEN)
 
 # Application
-make run             # Run the application
-make run-verbose     # Run with verbose logging
-
-# Cleanup
-make clean-test      # Clean test artifacts
-make clean-logs      # Clean log files
-make clean-cache     # Clean Python cache files
+make run             # Run the application with example query
 ```
 
 ### Makefile Features
 
-**Automated Testing Pipeline:**
+**Current Implementation:**
+
 ```makefile
+# Variables
+PY=python
+PIP=pip
+
+# Available targets
+.PHONY: setup test run fmt
+
+# Set up development environment
+setup:
+	$(PY) -m venv .venv && . .venv/bin/activate && $(PIP) install -r requirements.txt
+
+# Run tests with coverage
 test:
-	@echo "Running comprehensive test suite..."
-	pytest tests/ --cov=src --cov-report=term-missing --cov-report=xml
-	@echo "✅ All tests passed with coverage report"
+	pytest --cov=. tests/ --cov-report=xml
 
-test-verbose:
-	@echo "Running tests with verbose output..."
-	pytest tests/ -v --cov=src --cov-report=term-missing
-```
+# Run application with example
+run:
+	$(PY) main.py "What is 12.5% of 243?" -a gemini -v
 
-**SonarQube Integration:**
-```makefile
+# Format code
+fmt:
+	black .
+
+# SonarQube analysis
 sonar:
-	@echo "Running SonarQube analysis..."
-	@if [ -z "$(SONAR_TOKEN)" ]; then \
-		echo "❌ SONAR_TOKEN environment variable is required"; \
-		echo "Export your token: export SONAR_TOKEN=your_token_here"; \
-		exit 1; \
-	fi
-	pytest tests/ --cov=src --cov-report=xml --junitxml=test-results.xml
-	sonar-scanner \
-		-Dsonar.projectKey=ai-tool-agent-system \
-		-Dsonar.sources=src \
-		-Dsonar.tests=tests \
-		-Dsonar.host.url=http://localhost:9000 \
-		-Dsonar.login=$(SONAR_TOKEN)
-	@echo "✅ SonarQube analysis complete"
+	sonar-scanner -Dsonar.projectKey=AIToolProject -Dsonar.sources=. -Dsonar.host.url=http://localhost:4000 -Dsonar.login=$$SONAR_TOKEN
 ```
 
-**Development Workflow:**
-```makefile
-setup-dev: install
-	@echo "Setting up development environment..."
-	@echo "Creating .env template..."
-	@if [ ! -f .env ]; then \
-		echo "WEATHER_API_KEY=your_openweathermap_key" > .env; \
-		echo "GEMINI_API_KEY=your_gemini_key" >> .env; \
-		echo "OPENAI_API_KEY=your_openai_key" >> .env; \
-		echo "📝 Created .env template - please add your API keys"; \
-	fi
-	@echo "✅ Development environment ready"
-```
+**Key Features:**
+
+- ✅ **Virtual Environment Setup**: `make setup` creates isolated Python environment
+- ✅ **Automated Testing**: `make test` runs full test suite with coverage
+- ✅ **Code Formatting**: `make fmt` applies consistent code style
+- ✅ **SonarQube Integration**: `make sonar` runs quality analysis
+- ✅ **Example Execution**: `make run` demonstrates application usage
 
 ## Environment Setup
 
@@ -299,14 +273,13 @@ setup-dev: install
 git clone <repository-url>
 cd ai-tool-agent-system
 
-# Set up complete development environment
-make setup-dev
+# Set up development environment
+make setup
 
 # This automatically:
-# 1. Creates virtual environment
-# 2. Installs all dependencies
-# 3. Creates .env template
-# 4. Sets up development tools
+# 1. Creates virtual environment (.venv)
+# 2. Activates the environment
+# 3. Installs all dependencies from requirements.txt
 ```
 
 #### **Option 2: Manual Setup**
@@ -322,8 +295,8 @@ make setup-dev
 3. **Install dependencies**:
 
    ```bash
-   # Using Makefile
-   make install
+   # Using Makefile (creates venv and installs)
+   make setup
 
    # Or manually
    pip install -r requirements.txt
@@ -362,19 +335,14 @@ The system provides a simple CLI for interacting with the agent:
 #### **Using Makefile Commands**
 
 ```bash
-# Basic usage
-make run QUERY="Your question here"
+# Run with default example query
+make run
 
-# Examples
-make run QUERY="What is 12.5% of 243?"
-make run QUERY="Summarize today's weather in Paris in 3 words"
-make run QUERY="Who is Ada Lovelace?"
-make run QUERY="Add 10 to the average temperature in Paris and London right now"
-make run QUERY="Convert 100 USD to EUR"
-
-# Verbose mode (shows execution metrics)
-make run-verbose QUERY="What is the weather in Tokyo?"
+# This executes: python main.py "What is 12.5% of 243?" -a gemini -v
+# Shows: calculation result with verbose metrics
 ```
+
+**Note**: The current Makefile `run` target uses a hardcoded example query. To run custom queries, use the direct Python method below.
 
 #### **Direct Python Execution**
 
@@ -561,10 +529,6 @@ flowchart TD
     F --> H[Next Entry]
     H --> C
     G --> I[Return Top Matches]
-
-    style A fill:#e1f5fe
-    style I fill:#e8f5e8
-    style E fill:#f3e5f5
 ```
 
 **Robustness Benefits:**
@@ -621,14 +585,15 @@ This robust search mechanism ensures that users can find information even with i
 
 **Why Jaccard Similarity Over Other Algorithms?**
 
-| Algorithm | Pros | Cons | Use Case |
-|-----------|------|------|----------|
-| **Jaccard Similarity** ✅ | • Handles typos well<br>• Fast computation<br>• Order-independent<br>• Good for short strings | • Less effective for very long texts | **Names, titles, short queries** |
-| Levenshtein Distance | • Precise edit distance<br>• Handles insertions/deletions | • Order-dependent<br>• Slower for large datasets<br>• Poor with rearranged words | Long text comparison |
-| Cosine Similarity | • Great for documents<br>• Handles synonyms | • Requires vectorization<br>• Computationally expensive<br>• Overkill for names | Document similarity |
-| Exact Match | • Perfect precision<br>• Very fast | • No typo tolerance<br>• Brittle user experience | Database keys, IDs |
+| Algorithm                 | Pros                                                                                          | Cons                                                                             | Use Case                         |
+| ------------------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------- |
+| **Jaccard Similarity** ✅ | • Handles typos well<br>• Fast computation<br>• Order-independent<br>• Good for short strings | • Less effective for very long texts                                             | **Names, titles, short queries** |
+| Levenshtein Distance      | • Precise edit distance<br>• Handles insertions/deletions                                     | • Order-dependent<br>• Slower for large datasets<br>• Poor with rearranged words | Long text comparison             |
+| Cosine Similarity         | • Great for documents<br>• Handles synonyms                                                   | • Requires vectorization<br>• Computationally expensive<br>• Overkill for names  | Document similarity              |
+| Exact Match               | • Perfect precision<br>• Very fast                                                            | • No typo tolerance<br>• Brittle user experience                                 | Database keys, IDs               |
 
 **Jaccard similarity** was chosen because it provides the optimal balance of:
+
 - **Speed**: O(n) character set operations
 - **Flexibility**: Handles various types of input errors
 - **Simplicity**: Easy to understand and debug
@@ -719,35 +684,23 @@ pytest -q
 
 #### **Using Makefile (Recommended)**
 
-The project includes a comprehensive Makefile for automated testing and quality assurance:
+The project includes a Makefile for automated testing and development workflows:
 
 ```bash
-# Run all tests with coverage
+# Set up development environment (creates venv and installs dependencies)
+make setup
+
+# Run all tests with coverage (generates XML report)
 make test
 
-# Run tests with verbose output
-make test-verbose
+# Run the application with example query
+make run
 
-# Run only unit tests
-make test-unit
+# Format code with black
+make fmt
 
-# Run only integration tests
-make test-integration
-
-# Generate coverage report
-make coverage
-
-# Run SonarQube analysis
+# Run SonarQube analysis (requires SONAR_TOKEN)
 make sonar
-
-# Clean test artifacts
-make clean-test
-
-# Install dependencies
-make install
-
-# Set up development environment
-make setup-dev
 ```
 
 #### **SonarQube Integration**
@@ -755,6 +708,7 @@ make setup-dev
 The project integrates with SonarQube for comprehensive code quality analysis:
 
 **Prerequisites:**
+
 1. SonarQube server running (local or remote)
 2. SonarQube scanner installed
 3. Project configured in SonarQube
@@ -779,12 +733,14 @@ echo $SONAR_TOKEN
 ```
 
 **SonarQube Token Requirements:**
+
 - **Token Type**: User Token or Project Analysis Token
 - **Permissions**: Execute Analysis permission on the project
 - **Format**: Alphanumeric string (e.g., `squ_1234567890abcdef1234567890abcdef12345678`)
 - **Scope**: Project-level or global analysis permissions
 
 **Getting a SonarQube Token:**
+
 1. Log into your SonarQube instance
 2. Go to **My Account** → **Security** → **Generate Tokens**
 3. Create a new token with **Execute Analysis** permissions
@@ -817,6 +773,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 ```
 
 **Current SonarQube Metrics:**
+
 - **Code Coverage**: ~70%
 - **Lines of Code**: ~2,500
 - **Maintainability Rating**: A
@@ -826,6 +783,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 - **Duplicated Lines**: <3%
 
 **Quality Gates:**
+
 - ✅ Coverage ≥ 70%
 - ✅ Maintainability Rating = A
 - ✅ Reliability Rating = A
@@ -838,12 +796,14 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 #### 1. **Unit Tests (77 tests)**
 
 **Tool Tests (56 tests):**
+
 - ✅ **Calculator Tool** (13 tests): Mathematical operations, complex expressions, bracket handling
 - ✅ **Currency Converter** (15 tests): API integration, validation, error scenarios, network failures
 - ✅ **Weather API** (14 tests): Real API integration, city validation, error handling, edge cases
 - ✅ **Weather Stub** (14 tests): Mock behavior, data consistency, fallback scenarios
 
 **Infrastructure Tests (21 tests):**
+
 - ✅ **API Client** (20 tests): HTTP operations, authentication, error handling, logging integration
 - ✅ **LLM Stub** (7 tests): Tool suggestion logic, agent integration, response generation
 
@@ -864,6 +824,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 ### Test Quality Metrics
 
 **Coverage Breakdown:**
+
 - **Overall Coverage**: ~70%
 - **Core Tools**: 95%+ coverage
 - **API Client**: 90%+ coverage
@@ -871,6 +832,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 - **Schema Validation**: 100% coverage
 
 **Test Reliability:**
+
 - **Pass Rate**: 100% (90/90 tests passing)
 - **Execution Time**: <1 second for full suite
 - **Flaky Tests**: 0 (all tests deterministic)
@@ -919,6 +881,7 @@ def test_weather_extreme_temperatures():
 ### Continuous Integration
 
 **GitHub Actions Integration:**
+
 ```yaml
 name: Test Suite
 on: [push, pull_request]
@@ -930,7 +893,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - name: Install dependencies
         run: make install
       - name: Run tests with coverage
@@ -977,11 +940,6 @@ graph LR
     D --> H
     E --> I
     F --> J
-
-    style G fill:#e8f5e8
-    style D fill:#fff3e0
-    style E fill:#f3e5f5
-    style F fill:#e1f5fe
 ```
 
 ### Logger Types
