@@ -26,7 +26,7 @@ sonar:
 		echo "Export your token: export SONAR_TOKEN=your_token_here"; \
 		exit 1; \
 	fi
-	sonar-scanner -Dsonar.projectKey=AIToolProject -Dsonar.sources=. -Dsonar.host.url=http://localhost:4000 -Dsonar.login=$$SONAR_TOKEN
+	sonar-scanner -Dsonar.projectKey=AIToolProject -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$$SONAR_TOKEN
 
 
 fmt:
