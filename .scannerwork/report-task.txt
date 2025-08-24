@@ -1,6 +1,0 @@
-projectKey=AIToolProject
-serverUrl=http://localhost:4000
-serverVersion=9.9.8.100196
-dashboardUrl=http://localhost:4000/dashboard?id=AIToolProject
-ceTaskId=AZjdOTHZ3D-VmC99uOFV
-ceTaskUrl=http://localhost:4000/api/ce/task?id=AZjdOTHZ3D-VmC99uOFV
