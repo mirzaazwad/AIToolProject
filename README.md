@@ -690,6 +690,9 @@ The project includes a Makefile for automated testing and development workflows:
 # Set up development environment (creates venv and installs dependencies)
 make setup
 
+# Install dependencies (assumes environment is already activated)
+make install
+
 # Run all tests with coverage (generates XML report)
 make test
 
@@ -701,6 +704,9 @@ make fmt
 
 # Run SonarQube analysis (requires SONAR_TOKEN)
 make sonar
+
+# Clean generated files
+make clean
 ```
 
 #### **SonarQube Integration**
