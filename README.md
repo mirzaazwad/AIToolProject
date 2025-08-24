@@ -772,16 +772,6 @@ sonar.python.xunit.reportPath=test-results.xml
 sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 ```
 
-**Current SonarQube Metrics:**
-
-- **Code Coverage**: ~70%
-- **Lines of Code**: ~2,500
-- **Maintainability Rating**: A
-- **Reliability Rating**: A
-- **Security Rating**: A
-- **Technical Debt**: <1 hour
-- **Duplicated Lines**: <3%
-
 **Quality Gates:**
 
 - ✅ Coverage ≥ 70%
