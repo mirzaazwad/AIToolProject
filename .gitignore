@@ -8,7 +8,7 @@
 .venv
 
 # Ignore Environment Variables
-.env.*
+.env
 !.env.example
 
 # Ignore Logs
