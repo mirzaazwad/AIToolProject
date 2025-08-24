@@ -4,8 +4,14 @@ omit =
     */__init__.py
 
 [report]
-# Exclude docstrings from line coverage
+# Exclude docstrings, comments, and blank/whitespace-only lines from coverage
 exclude_lines =
-    # Have to ignore docstrings
+    # Ignore docstrings
     ^\s*"""      # start of a triple-quoted string
     ^\s*'''      # start of a single-quoted string
+
+    # Ignore comments
+    ^\s*#.*
+
+    # Ignore empty or whitespace-only lines
+    ^\s*$
