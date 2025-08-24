@@ -1,10 +1,10 @@
 """AgentStub that utilizes the StubToolInvoker/StubLLMStrategy"""
 
 from typing import List, Dict, Any
-from lib.agents.base import Agent
+from src.lib.agents.base import Agent
 from .llm import StubLLMStrategy
 from .tools.invoker import StubToolInvoker
-from constants.messages import FAILED_AGENT_MESSAGE
+from src.constants.messages import FAILED_AGENT_MESSAGE
 import re
 
 

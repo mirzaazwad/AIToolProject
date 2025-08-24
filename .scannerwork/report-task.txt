@@ -1,0 +1,6 @@
+projectKey=Optimizely_Assignment
+serverUrl=http://localhost:4000
+serverVersion=9.9.8.100196
+dashboardUrl=http://localhost:4000/dashboard?id=Optimizely_Assignment
+ceTaskId=AZjc_V6osNzxq4W7H_ay
+ceTaskUrl=http://localhost:4000/api/ce/task?id=AZjc_V6osNzxq4W7H_ay

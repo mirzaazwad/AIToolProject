@@ -5,8 +5,8 @@ Handles Calculator, Weather, KnowledgeBase, CurrencyConverter.
 import re
 import math
 from typing import Optional
-from data.schemas.tool import CalculatorArgs, WeatherArgs, KnowledgeBaseArgs, CurrencyConverterArgs, ToolPlan, ToolSuggestion
-from lib.llm.base import LLMStrategy
+from src.data.schemas.tools.tool import CalculatorArgs, WeatherArgs, KnowledgeBaseArgs, CurrencyConverterArgs, ToolPlan, ToolSuggestion
+from src.lib.llm.base import LLMStrategy
 from tests.constants.weather import CITY_TEMPERATURE
 from tests.constants.calculator import OPERATOR_PATTERNS
 
