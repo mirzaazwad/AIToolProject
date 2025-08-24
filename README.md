@@ -888,10 +888,6 @@ jobs:
         run: make install
       - name: Run tests with coverage
         run: make test
-      - name: SonarQube analysis
-        run: make sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
 
 ## Logging & Monitoring
