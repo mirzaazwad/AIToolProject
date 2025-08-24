@@ -1,0 +1,36 @@
+{
+  "entries": [
+    {
+      "name": "Ada Lovelace",
+      "summary": "Ada Lovelace was a 19th-century mathematician regarded as an early computing pioneer for her work on Charles Babbage's Analytical Engine."
+    },
+    {
+      "name": "Alan Turing",
+      "summary": "Alan Turing was a mathematician and logician, widely considered to be the father of theoretical computer science and artificial intelligence."
+    },
+    {
+      "name": "Albert Einstein",
+      "summary": "Albert Einstein was a German-born theoretical physicist who developed the theory of relativity."
+    },
+    {
+      "name": "Marie Curie",
+      "summary": "Marie Curie was a Polish-born French physicist and chemist who conducted pioneering research on radioactivity."
+    },
+    {
+      "name": "Nikola Tesla",
+      "summary": "Nikola Tesla was a Serbian-American inventor, electrical engineer, and mechanical engineer who is best known for his contributions to the design of the modern alternating current (AC) electricity supply system."
+    },
+    {
+      "name": "Isaac Newton",
+      "summary": "Isaac Newton was an English mathematician, physicist, and astronomer who is widely recognized as one of the most influential scientists of all time."
+    },
+    {
+      "name": "Galileo Galilei",
+      "summary": "Galileo Galilei was an Italian astronomer, physicist, and engineer who played a crucial role in the Scientific Revolution."
+    },
+    {
+      "name": "Leonardo da Vinci",
+      "summary": "Leonardo da Vinci was an Italian polymath whose areas of interest included invention, painting, sculpting, architecture, science, music, mathematics, engineering, literature, anatomy, geology, astronomy, botany, writing, history, and cartography."
+    }
+  ]
+}
