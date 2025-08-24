@@ -1,0 +1,20 @@
+
+# Ignore Cached Files
+**/__pycache__
+**/.mpy_cache
+**/.pytest_cache
+
+# Ignore Virtual Environment
+.venv
+
+# Ignore Environment Variables
+.env.*
+!.env.example
+
+# Ignore Logs
+logs
+!logs/.gitkeep
+
+#Ignore Developer Environments
+.vscode
+.idea
