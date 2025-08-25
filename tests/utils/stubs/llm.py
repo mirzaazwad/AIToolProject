@@ -15,8 +15,8 @@ from src.data.schemas.tools.tool import (
     ToolSuggestion,
 )
 from src.lib.llm.base import LLMStrategy
-from tests.constants.weather import CITY_TEMPERATURE
-from tests.constants.calculator import OPERATOR_PATTERNS
+from tests.utils.constants.weather import CITY_TEMPERATURE
+from tests.utils.constants.calculator import OPERATOR_PATTERNS
 
 
 def safe_eval(expr: str) -> Optional[float]:

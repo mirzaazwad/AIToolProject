@@ -10,7 +10,7 @@ from src.data.schemas.tools.weather import (
     SysData,
 )
 from src.lib.tools.base import Action
-from tests.constants.weather import (
+from tests.utils.constants.weather import (
     CITY_TEMPERATURE,
     WEATHER_METADATA,
     DEFAULT_WEATHER_METADATA,

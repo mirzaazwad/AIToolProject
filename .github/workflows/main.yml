@@ -3,7 +3,7 @@ name: Test Suite
 on:
   push:
   pull_request:
-    branches: [improvements]
+    branches: [main]
 
 jobs:
   test:
