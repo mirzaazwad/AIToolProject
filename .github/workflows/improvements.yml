@@ -1,8 +1,7 @@
-name: Test Suite
+name: Improvements Tests
 
 on:
   push:
-  pull_request:
     branches: [improvements]
 
 jobs:
@@ -18,6 +17,12 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Create .env file from secrets
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}" >> .env
+
       - name: Install dependencies
         run: make install
 
@@ -28,3 +33,6 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Cleanup .env
+        run: rm -f .env

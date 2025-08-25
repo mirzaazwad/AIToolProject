@@ -48,7 +48,11 @@ class TestWeather:
             "cod": 200,
         }
 
-        with patch.object(self.weather.apiClient, "get", return_value=self._mock_response(200, json_data)):
+        with patch.object(
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(200, json_data),
+        ):
             result = self.weather.execute({"city": "London"})
             assert "15.0°C" in result
             assert "clear sky" in result
@@ -78,7 +82,11 @@ class TestWeather:
             "sys": {"country": "XX", "sunrise": 1640000000, "sunset": 1640030000},
             "cod": 200,
         }
-        with patch.object(self.weather.apiClient, "get", return_value=self._mock_response(200, json_data)):
+        with patch.object(
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(200, json_data),
+        ):
             result = self.weather.execute({"city": city})
             expected_temp = round(temp_kelvin - 273.15, 1)
             assert f"{expected_temp}°C" in result
@@ -100,7 +108,9 @@ class TestWeather:
     def test_city_not_found(self):
         """Test error when city is not found."""
         with patch.object(
-            self.weather.apiClient, "get", return_value=self._mock_response(404, text="city not found")
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(404, text="city not found"),
         ):
             with pytest.raises(CityNotFoundError, match="City 'InvalidCity' not found"):
                 self.weather.execute({"city": "InvalidCity"})
@@ -124,7 +134,9 @@ class TestWeather:
     def test_api_error_responses(self, status_code, text):
         """Test handling of API server and unauthorized errors."""
         with patch.object(
-            self.weather.apiClient, "get", return_value=self._mock_response(status_code, text=text)
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(status_code, text=text),
         ):
             with pytest.raises(WeatherAPIError, match="Weather API error"):
                 self.weather.execute({"city": "London"})
@@ -132,13 +144,19 @@ class TestWeather:
     def test_malformed_api_response(self):
         """Test handling of malformed API responses."""
         bad_json = {"invalid": "response"}
-        with patch.object(self.weather.apiClient, "get", return_value=self._mock_response(200, bad_json)):
+        with patch.object(
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(200, bad_json),
+        ):
             with pytest.raises(WeatherAPIError, match="Invalid weather data format"):
                 self.weather.execute({"city": "London"})
 
     def test_network_error(self):
         """Test handling of network errors."""
-        with patch.object(self.weather.apiClient, "get", side_effect=Exception("Network error")):
+        with patch.object(
+            self.weather.apiClient, "get", side_effect=Exception("Network error")
+        ):
             with pytest.raises(WeatherAPIError, match="Weather request failed"):
                 self.weather.execute({"city": "London"})
 
@@ -157,7 +175,11 @@ class TestWeather:
             "sys": {"country": "XX", "sunrise": 1640000000, "sunset": 1640030000},
             "cod": 200,
         }
-        with patch.object(self.weather.apiClient, "get", return_value=self._mock_response(200, json_data)):
+        with patch.object(
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(200, json_data),
+        ):
             result = self.weather.execute({"city": "TestCity"})
             assert "15.0°C" in result
             assert "clear sky" in result
@@ -187,7 +209,11 @@ class TestWeather:
             "sys": {"country": "XX", "sunrise": 1640000000, "sunset": 1640030000},
             "cod": 200,
         }
-        with patch.object(self.weather.apiClient, "get", return_value=self._mock_response(200, json_data)):
+        with patch.object(
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(200, json_data),
+        ):
             result = self.weather.execute({"city": "ExtremeCity"})
             assert f"{expected_celsius}°C" in result
 
@@ -209,7 +235,11 @@ class TestWeather:
             "sys": {"country": "GB", "sunrise": 1640000000, "sunset": 1640030000},
             "cod": 200,
         }
-        with patch.object(self.weather.apiClient, "get", return_value=self._mock_response(200, json_data)):
+        with patch.object(
+            self.weather.apiClient,
+            "get",
+            return_value=self._mock_response(200, json_data),
+        ):
             result = self.weather.execute({"city": city_name})
             assert "15.0°C" in result
             assert "clear sky" in result

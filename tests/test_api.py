@@ -15,12 +15,14 @@ def client():
 @pytest.fixture
 def mock_response():
     """Factory fixture to create a mock response object."""
+
     def _create(status_code=200, text="OK", json_data=None):
         response = Mock()
         response.status_code = status_code
         response.text = text
         response.json.return_value = json_data or {}
         return response
+
     return _create
 
 
@@ -45,7 +47,9 @@ class TestApiClient:
     def test_build_url_with_and_without_base(self, client):
         assert client._build_url("/endpoint") == "https://api.example.com/endpoint"
         assert client._build_url("endpoint") == "https://api.example.com/endpoint"
-        assert ApiClient()._build_url("https://full.url.com/x") == "https://full.url.com/x"
+        assert (
+            ApiClient()._build_url("https://full.url.com/x") == "https://full.url.com/x"
+        )
 
     def test_set_headers_and_auth(self, client):
         headers = {"Content-Type": "application/json"}
@@ -119,15 +123,16 @@ class TestApiClient:
             )
 
     def test_request_exceptions(self, client):
-        with patch("requests.get", side_effect=requests.exceptions.Timeout("Timeout")), patch(
-            "src.lib.api.api_logger"
-        ) as mock_logger:
+        with patch(
+            "requests.get", side_effect=requests.exceptions.Timeout("Timeout")
+        ), patch("src.lib.api.api_logger") as mock_logger:
             with pytest.raises(requests.exceptions.RequestException):
                 client.get("/test")
             mock_logger.log_failed_call.assert_called_once()
 
         with patch(
-            "requests.get", side_effect=requests.exceptions.ConnectionError("Connection failed")
+            "requests.get",
+            side_effect=requests.exceptions.ConnectionError("Connection failed"),
         ), patch("src.lib.api.api_logger") as mock_logger:
             with pytest.raises(requests.exceptions.RequestException):
                 client.get("/test")
@@ -135,7 +140,9 @@ class TestApiClient:
 
     def test_post_http_error(self, client, mock_response):
         response = mock_response(400, "Bad Request")
-        response.raise_for_status.side_effect = requests.exceptions.HTTPError("400 error")
+        response.raise_for_status.side_effect = requests.exceptions.HTTPError(
+            "400 error"
+        )
         with patch("requests.post", return_value=response) as mock_post, patch(
             "src.lib.api.api_logger"
         ) as mock_logger:

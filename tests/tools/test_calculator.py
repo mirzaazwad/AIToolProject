@@ -66,5 +66,7 @@ class TestCalculator:
         assert result == "4.0"
 
     def test_mixed_brackets_complex_4(self):
-        result = self.calc.execute({"expr": "({[2 + 3] * (4 + 5)} - 6) / {7 - [8 % 3]}"})
+        result = self.calc.execute(
+            {"expr": "({[2 + 3] * (4 + 5)} - 6) / {7 - [8 % 3]}"}
+        )
         assert result == "7.8"

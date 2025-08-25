@@ -21,11 +21,11 @@ class Application:
     def __init__(self):
         """Initialize the application"""
         load_dotenv()
-        self.agent = None
-        self.question = None
-        self.verbose = False
-        self.parser = None
-        self.agent_type = "gemini"
+        self.agent: Agent|None = None
+        self.question: str|None = None
+        self.verbose: bool = False
+        self.parser: argparse.ArgumentParser|None = None
+        self.agent_type: str = "gemini"
 
     def run(self):
         """Run the application"""
@@ -108,7 +108,7 @@ class Application:
             print("Using Gemini Agent instead.")
             self.agent = GeminiAgent()
 
-    def run_agent(self):
+    def run_agent(self) -> tuple[str, float]:
         """Run the agent"""
         start_time = time.time()
         answer = self.agent.answer(self.question)

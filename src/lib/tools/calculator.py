@@ -49,6 +49,46 @@ class Calculator(Action):
             tokens.append(num)
         return tokens
 
+
+    def _is_number(self, token: str) -> bool:
+        """Check if token is a valid number (int or float)."""
+        return token.replace(".", "", 1).isdigit()
+
+    def _apply_operator(self, a: float, b: float, op: str) -> float:
+        """Apply an operator on two operands."""
+        if op == "+":
+            return a + b
+        if op == "-":
+            return a - b
+        if op == "*":
+            return a * b
+        if op == "/":
+            if b == 0:
+                raise EvaluationError("Division by zero")
+            return a / b
+        if op == "%":
+            if b == 0:
+                raise EvaluationError("Modulo by zero")
+            return a % b
+        if op == "^":
+            return a**b
+        raise EvaluationError(f"Unknown operator: '{op}'")
+
+    def _handle_operator(self, token: str, stack: list[str], output: list[str], precedence: dict):
+        """Handle operator tokens according to precedence rules."""
+        while stack and stack[-1] in precedence and precedence[stack[-1]] >= precedence[token]:
+            output.append(stack.pop())
+        stack.append(token)
+
+    def _handle_closing_bracket(self, token: str, stack: list[str], output: list[str], closing: dict):
+        """Handle closing bracket by unwinding stack until matching opening bracket."""
+        while stack and stack[-1] != closing[token]:
+            output.append(stack.pop())
+        if not stack:
+            raise BracketMismatchError("Mismatched closing bracket")
+        stack.pop()
+
+
     def _to_postfix(self, tokens: list[str]) -> list[str]:
         """Convert infix tokens to postfix notation using Shunting Yard algorithm."""
         output = []
@@ -59,24 +99,14 @@ class Calculator(Action):
         closing = {")": "(", "}": "{", "]": "["}
 
         for token in tokens:
-            if token.replace(".", "", 1).isdigit():
+            if self._is_number(token):
                 output.append(token)
             elif token in precedence:
-                while (
-                    stack
-                    and stack[-1] in precedence
-                    and precedence[stack[-1]] >= precedence[token]
-                ):
-                    output.append(stack.pop())
-                stack.append(token)
+                self._handle_operator(token, stack, output, precedence)
             elif token in opening:
                 stack.append(token)
             elif token in closing:
-                while stack and stack[-1] != closing[token]:
-                    output.append(stack.pop())
-                if not stack:
-                    raise BracketMismatchError("Mismatched closing bracket")
-                stack.pop()
+                self._handle_closing_bracket(token, stack, output, closing)
             else:
                 raise TokenizationError(f"Unknown token: '{token}'")
 
@@ -91,7 +121,7 @@ class Calculator(Action):
         """Evaluate postfix expression and return the result."""
         stack = []
         for token in postfix:
-            if token.replace(".", "", 1).isdigit():
+            if self._is_number(token):
                 try:
                     stack.append(float(token))
                 except ValueError:
@@ -102,28 +132,7 @@ class Calculator(Action):
 
                 b = stack.pop()
                 a = stack.pop()
-
-                try:
-                    if token == "+":
-                        stack.append(a + b)
-                    elif token == "-":
-                        stack.append(a - b)
-                    elif token == "*":
-                        stack.append(a * b)
-                    elif token == "/":
-                        if b == 0:
-                            raise EvaluationError("Division by zero")
-                        stack.append(a / b)
-                    elif token == "%":
-                        if b == 0:
-                            raise EvaluationError("Modulo by zero")
-                        stack.append(a % b)
-                    elif token == "^":
-                        stack.append(a**b)
-                    else:
-                        raise EvaluationError(f"Unknown operator: '{token}'")
-                except (OverflowError, ZeroDivisionError) as e:
-                    raise EvaluationError(f"Mathematical error: {str(e)}")
+                stack.append(self._apply_operator(a, b, token))
 
         if len(stack) != 1:
             raise EvaluationError("Invalid expression: multiple results")

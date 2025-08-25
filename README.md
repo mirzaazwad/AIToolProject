@@ -87,27 +87,33 @@ The codebase implements several well-established design patterns:
 
 ### 1. **Template Method Pattern**
 
-- **Location**: `lib/agents/base.py`
+- **Location**: `src/lib/agents/base.py`
 - **Purpose**: Defines the skeleton of the agent workflow while allowing subclasses to override specific steps
 - **Implementation**: The `answer()` method provides a template with hooks for preprocessing, tool execution, and response fusion
 
 ### 2. **Strategy Pattern**
 
-- **Location**: `lib/llm/base.py` and implementations
+- **Location**: `src/lib/llm/base.py` and implementations
 - **Purpose**: Allows switching between different LLM providers (Gemini, OpenAI) without changing client code
 - **Implementation**: Abstract `LLMStrategy` base class with concrete implementations for each provider
 
 ### 3. **Command Pattern**
 
-- **Location**: `lib/tools/base.py` and `lib/tools/tool_invoker.py`
+- **Location**: `src/lib/tools/base.py` and `src/lib/tools/tool_invoker.py`
 - **Purpose**: Encapsulates tool execution as objects, enabling parameterization and queuing
 - **Implementation**: `Action` base class for tools, `ToolInvoker` as the invoker
 
 ### 4. **Singleton Pattern**
 
-- **Location**: `lib/loggers/base.py`
+- **Location**: `src/lib/loggers/base.py`
 - **Purpose**: Ensures single instances of loggers across the application
 - **Implementation**: Metaclass-based singleton for consistent logging
+
+### 5. **Simple Factory Pattern**
+
+- **Location**: `src/app.py`
+- **Purpose**: Centralizes agent creation logic, where agents are instantiated based on user input
+- **Implementation**: Factory method for creating agents based on user input
 
 ## Directory Structure
 
@@ -308,17 +314,20 @@ make setup
    GEMINI_API_KEY=your_google_gemini_api_key
    OPENAI_API_KEY=your_openai_api_key
 
-   # Optional: SonarQube integration
-   SONAR_TOKEN=your_sonarqube_token
+   # Optional: SonarQube integration (dual setup)
+   SONAR_TOKEN_LOCAL=your_local_sonarqube_token
+   SONAR_TOKEN_CLOUD=your_sonarcloud_token
    ```
 
 ### Environment Variables Structure
 
-| Variable          | Required   | Purpose                   | Example        |
-| ----------------- | ---------- | ------------------------- | -------------- |
-| `WEATHER_API_KEY` | Yes        | OpenWeatherMap API access | `abc123def456` |
-| `GEMINI_API_KEY`  | Optional\* | Google Gemini API access  | `xyz789uvw012` |
-| `OPENAI_API_KEY`  | Optional\* | OpenAI API access         | `sk-proj-...`  |
+| Variable            | Required   | Purpose                     | Example         |
+| ------------------- | ---------- | --------------------------- | --------------- |
+| `WEATHER_API_KEY`   | Yes        | OpenWeatherMap API access   | `abc123def456`  |
+| `GEMINI_API_KEY`    | Optional\* | Google Gemini API access    | `xyz789uvw012`  |
+| `OPENAI_API_KEY`    | Optional\* | OpenAI API access           | `sk-proj-...`   |
+| `SONAR_TOKEN_LOCAL` | Optional   | Local SonarQube integration | `squ_abc123...` |
+| `SONAR_TOKEN_CLOUD` | Optional   | SonarCloud integration      | `squ_def456...` |
 
 \*At least one LLM API key is required for full functionality
 
@@ -632,19 +641,24 @@ flowchart TD
 
 ## Testing
 
-The system includes a comprehensive test suite with **90 tests achieving ~70% code coverage** and multiple testing strategies:
+The system includes a comprehensive test suite with **166 tests achieving 90%+ code coverage** and multiple testing strategies:
 
 ### Test Structure
 
 ```bash
 tests/
-├── llm/
+├── agent/                      # Agent integration tests
+│   ├── test_gemini_agent.py    # Gemini agent tests (19 tests)
+│   └── test_openai_agent.py    # OpenAI agent tests (13 tests)
+├── llm/                        # LLM strategy tests
+│   ├── test_gemini.py          # Gemini LLM strategy tests (20 tests)
+│   ├── test_openai.py          # OpenAI LLM strategy tests (16 tests)
 │   └── test_llm_stub.py        # LLM stub functionality tests (7 tests)
-├── tools/
+├── tools/                      # Tool unit tests
 │   ├── test_calculator.py      # Calculator tool unit tests (13 tests)
 │   ├── test_currency_converter.py # Currency converter tests (15 tests)
-│   ├── test_weather.py         # Weather tool tests (14 tests)
-│   └── test_weather_stub.py    # Weather stub tests (14 tests)
+│   ├── test_weather.py         # Weather tool tests (21 tests)
+│   └── test_weather_stub.py    # Weather stub tests (19 tests)
 ├── test_api.py                 # API client tests (20 tests)
 ├── test_smoke.py               # End-to-end smoke tests (7 tests)
 ├── constants/                  # Test constants and fixtures
@@ -698,40 +712,60 @@ make run
 # Format code with black
 make fmt
 
-# Run SonarQube analysis (requires SONAR_TOKEN)
-make sonar
+# Run local SonarQube analysis (requires SONAR_TOKEN_LOCAL)
+make sonar_local
+
+# Run SonarCloud analysis (requires SONAR_TOKEN_CLOUD)
+make sonar_cloud
 
 # Clean generated files
 make clean
 ```
 
+#### **Complete Makefile Commands Reference**
+
+| Command | Description | Requirements | Output |
+|---------|-------------|--------------|---------|
+| `make setup` | Create virtual environment and install dependencies | Python 3.10+ | `.venv/` directory |
+| `make install` | Install project dependencies | Active Python environment | Installed packages |
+| `make test` | Run full test suite with coverage | pytest, coverage | XML coverage report |
+| `make run` | Execute example query with Gemini agent | API keys (optional for stub) | Query result |
+| `make fmt` | Format code with Black formatter | black package | Formatted Python files |
+| `make sonar_local` | Run local SonarQube analysis | `SONAR_TOKEN_LOCAL`, sonar-scanner | Local SonarQube report |
+| `make sonar_cloud` | Run SonarCloud analysis | `SONAR_TOKEN_CLOUD`, sonar-scanner | SonarCloud report |
+| `make clean` | Remove cache and generated files | None | Clean workspace |
+
 #### **SonarQube Integration**
 
-The project integrates with SonarQube for comprehensive code quality analysis:
+The project integrates with both **local SonarQube** and **SonarCloud** for comprehensive code quality analysis:
 
 **Prerequisites:**
 
-1. SonarQube server running (local or remote)
-2. SonarQube scanner installed
-3. Project configured in SonarQube
+1. **Local SonarQube**: SonarQube server running locally + SonarQube scanner installed
+2. **SonarCloud**: SonarCloud account + Project configured on SonarCloud
+3. SonarQube scanner installed locally
 
-**Setup SonarQube Token:**
+**Setup SonarQube Tokens:**
 
-The Makefile requires the SonarQube token to be exported as an environment variable:
+The Makefile supports dual SonarQube setup with separate tokens:
 
 ```bash
-# Method 1: Export token for current session
-export SONAR_TOKEN=your_sonarqube_token_here
+# Method 1: Export tokens for current session
+export SONAR_TOKEN_LOCAL=your_local_sonarqube_token_here
+export SONAR_TOKEN_CLOUD=your_sonarcloud_token_here
 
 # Method 2: Add to your shell profile (persistent)
-echo 'export SONAR_TOKEN=your_sonarqube_token_here' >> ~/.bashrc
+echo 'export SONAR_TOKEN_LOCAL=your_local_token_here' >> ~/.bashrc
+echo 'export SONAR_TOKEN_CLOUD=your_cloud_token_here' >> ~/.bashrc
 source ~/.bashrc
 
-# Method 3: Create .env file (loaded automatically)
-echo "SONAR_TOKEN=your_sonarqube_token_here" >> .env
+# Method 3: Create .env file (recommended)
+echo "SONAR_TOKEN_LOCAL=your_local_token_here" >> .env
+echo "SONAR_TOKEN_CLOUD=your_cloud_token_here" >> .env
 
-# Verify token is set
-echo $SONAR_TOKEN
+# Verify tokens are set
+echo $SONAR_TOKEN_LOCAL
+echo $SONAR_TOKEN_CLOUD
 ```
 
 **SonarQube Token Requirements:**
@@ -752,13 +786,16 @@ echo $SONAR_TOKEN
 **Running SonarQube Analysis:**
 
 ```bash
-# Run complete analysis with tests and coverage
-make sonar
+# Run local SonarQube analysis
+make sonar_local
 
-# This executes:
-# 1. pytest --cov=src --cov-report=xml
-# 2. sonar-scanner with project configuration
-# 3. Uploads results to SonarQube server
+# Run SonarCloud analysis
+make sonar_cloud
+
+# Both commands execute:
+# 1. Validate required environment token is set
+# 2. Run sonar-scanner with appropriate configuration
+# 3. Upload results to respective SonarQube instance
 ```
 
 **SonarQube Configuration (`sonar-project.properties`):**
@@ -776,59 +813,57 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 
 **Quality Gates:**
 
-- ✅ Coverage ≥ 70%
+- ✅ Coverage ≥ 90% (Currently: 90.3%)
 - ✅ Maintainability Rating = A
 - ✅ Reliability Rating = A
 - ✅ Security Rating = A
 - ✅ Duplicated Lines < 3%
 - ✅ Technical Debt < 1 hour
+- ✅ Cognitive Complexity optimized (reduced complexity in key methods)
 
 ### Test Categories & Coverage
 
-#### 1. **Unit Tests (77 tests)**
+#### 1. **Unit Tests (159 tests)**
 
-**Tool Tests (56 tests):**
+**Agent Tests (32 tests):**
+- ✅ **Gemini Agent** (19 tests): Integration testing, tool coordination, error handling
+- ✅ **OpenAI Agent** (13 tests): LLM integration, response processing, logging validation
 
+**LLM Strategy Tests (43 tests):**
+- ✅ **Gemini LLM** (20 tests): API integration, response parsing, error scenarios
+- ✅ **OpenAI LLM** (16 tests): Content handling, tool plan generation, edge cases
+- ✅ **LLM Stub** (7 tests): Mock behavior, tool suggestion logic, agent integration
+
+**Tool Tests (64 tests):**
 - ✅ **Calculator Tool** (13 tests): Mathematical operations, complex expressions, bracket handling
 - ✅ **Currency Converter** (15 tests): API integration, validation, error scenarios, network failures
-- ✅ **Weather API** (14 tests): Real API integration, city validation, error handling, edge cases
-- ✅ **Weather Stub** (14 tests): Mock behavior, data consistency, fallback scenarios
+- ✅ **Weather API** (21 tests): Real API integration, city validation, error handling, edge cases
+- ✅ **Weather Stub** (19 tests): Mock behavior, data consistency, fallback scenarios
 
-**Infrastructure Tests (21 tests):**
-
+**Infrastructure Tests (20 tests):**
 - ✅ **API Client** (20 tests): HTTP operations, authentication, error handling, logging integration
-- ✅ **LLM Stub** (7 tests): Tool suggestion logic, agent integration, response generation
 
-#### 2. **Integration Tests (6 tests)**
+#### 2. **Integration Tests (7 tests)**
 
 - ✅ **End-to-End Workflows**: Complete query processing pipelines
 - ✅ **Tool Coordination**: Multi-tool query execution
 - ✅ **API Integration**: External service interaction
 - ✅ **Error Recovery**: System resilience testing
-
-#### 3. **Smoke Tests (7 tests)**
-
-- ✅ **Critical User Scenarios**: Real-world query examples
-- ✅ **System Reliability**: Core functionality validation
-- ✅ **Performance Benchmarks**: Response time verification
-- ✅ **Cross-Component Integration**: Full system testing
+- ✅ **Cross-Agent Compatibility**: Gemini, OpenAI, and Stub agent validation
+- ✅ **Real-world Scenarios**: Complex multi-step queries
+- ✅ **Performance Validation**: Response time and accuracy testing
 
 ### Test Quality Metrics
 
-**Coverage Breakdown:**
-
-- **Overall Coverage**: ~70%
-- **Core Tools**: 95%+ coverage
-- **API Client**: 90%+ coverage
-- **Error Handling**: 85%+ coverage
-- **Schema Validation**: 100% coverage
+**Overall Coverage**: 90%+ (166 tests)
 
 **Test Reliability:**
 
-- **Pass Rate**: 100% (90/90 tests passing)
-- **Execution Time**: <1 second for full suite
+- **Pass Rate**: 100% (166/166 tests passing)
+- **Execution Time**: ~90 seconds for full suite
 - **Flaky Tests**: 0 (all tests deterministic)
-- **Mock Coverage**: 100% external API calls mocked
+- **Mock Coverage**: 100% external dependencies mocked
+- **Error Scenarios**: All failure paths tested
 
 ### Test Doubles and Stubs
 
@@ -1122,12 +1157,65 @@ class TranslatorArgs(ToolArgument):
     target_language: str
 ```
 
+## 🚀 CI/CD & GitHub Actions
+
+The project includes automated workflows for continuous integration and quality assurance:
+
+### GitHub Actions Workflows
+
+The project has **two GitHub Actions workflows** for different branches:
+
+#### 1. **Main Branch Workflow** (`.github/workflows/main.yml`)
+- **Trigger**: Push/PR to `main` branch
+- **Purpose**: Production-ready code validation
+- **Steps**:
+  - Python environment setup (3.10, 3.11, 3.12)
+  - Dependency installation
+  - Comprehensive test suite execution
+  - Coverage report generation
+  - SonarCloud quality gate validation
+
+#### 2. **Improvements Branch Workflow** (`.github/workflows/improvements.yml`)
+- **Trigger**: Push/PR to `improvements` branch
+- **Purpose**: Development and enhancement validation
+- **Steps**:
+  - Multi-version Python testing
+  - Extended test coverage analysis
+  - Code quality checks
+  - Performance benchmarking
+
+### Branch Strategy
+
+The repository follows a **dual-branch strategy**:
+
+#### 🌟 **Main Branch**
+- **Purpose**: Stable, production-ready code
+- **Features**: Core functionality with proven stability
+- **Quality**: All tests passing, 90%+ coverage
+- **Deployment**: Ready for production use
+
+#### 🔧 **Improvements Branch**
+- **Purpose**: Enhanced features and optimizations
+- **Features**: Advanced improvements and experimental features
+- **Quality**: Extended test suite, performance optimizations
+- **Focus**: Demonstrates potential enhancements that could be applied
+
+**Key Improvements in `improvements` branch:**
+- ✅ **Enhanced Test Coverage**: 166 tests (vs 90 in main)
+- ✅ **Cognitive Complexity Reduction**: Optimized method complexity per SonarQube recommendations
+- ✅ **Advanced Error Handling**: More robust error scenarios
+- ✅ **Performance Optimizations**: Improved response times
+- ✅ **Extended LLM Support**: Comprehensive OpenAI and Gemini integration
+- ✅ **Enhanced Logging**: Detailed execution metrics
+
 ### Quality Assurance
 
 - **Type Hints**: Complete type annotation throughout codebase
 - **Documentation**: Comprehensive docstrings and comments
 - **Error Messages**: Clear, actionable error descriptions
 - **Code Organization**: Logical module structure with clear responsibilities
-- **Testing**: 95%+ test coverage with realistic scenarios
+- **Testing**: 90%+ test coverage with realistic scenarios
+- **Cognitive Complexity**: Optimized per SonarQube recommendations
+- **Code Quality**: SonarCloud integration with quality gates
 
 This solution transforms a fragile prototype into a production-ready system that is robust, extensible, and maintainable while meeting all original requirements and adding significant value through comprehensive monitoring and testing capabilities.

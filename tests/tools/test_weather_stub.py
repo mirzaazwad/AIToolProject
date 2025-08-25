@@ -17,10 +17,42 @@ class TestWeatherStub:
     @pytest.mark.parametrize(
         "city, expected",
         [
-            ("Paris", {"temp_c": 18.0, "description": "cloudy and mild.", "humidity": 60, "wind_speed": 3.2}),
-            ("London", {"temp_c": 17.0, "description": "cold and rainy.", "humidity": 70, "wind_speed": 4.1}),
-            ("Dhaka", {"temp_c": 31.0, "description": "humid and hot.", "humidity": 85, "wind_speed": 2.5}),
-            ("Amsterdam", {"temp_c": 19.5, "description": "windy and cloudy.", "humidity": 65, "wind_speed": 3.8}),
+            (
+                "Paris",
+                {
+                    "temp_c": 18.0,
+                    "description": "cloudy and mild.",
+                    "humidity": 60,
+                    "wind_speed": 3.2,
+                },
+            ),
+            (
+                "London",
+                {
+                    "temp_c": 17.0,
+                    "description": "cold and rainy.",
+                    "humidity": 70,
+                    "wind_speed": 4.1,
+                },
+            ),
+            (
+                "Dhaka",
+                {
+                    "temp_c": 31.0,
+                    "description": "humid and hot.",
+                    "humidity": 85,
+                    "wind_speed": 2.5,
+                },
+            ),
+            (
+                "Amsterdam",
+                {
+                    "temp_c": 19.5,
+                    "description": "windy and cloudy.",
+                    "humidity": 65,
+                    "wind_speed": 3.8,
+                },
+            ),
         ],
     )
     def test_known_cities(self, city, expected):
@@ -32,7 +64,9 @@ class TestWeatherStub:
         assert result["description"] == expected["description"]
         assert result["humidity"] == expected["humidity"]
         assert result["wind_speed"] == expected["wind_speed"]
-        assert f"{expected['temp_c']}°C, {expected['description']}" in result["response"]
+        assert (
+            f"{expected['temp_c']}°C, {expected['description']}" in result["response"]
+        )
 
     def test_unknown_city_uses_defaults(self):
         """Test weather stub for unknown city uses default values."""
@@ -41,7 +75,10 @@ class TestWeatherStub:
         assert result["city"] == "UnknownCity"
         for key, value in DEFAULT_WEATHER_METADATA.items():
             assert result[key] == value
-        assert f"{DEFAULT_WEATHER_METADATA['temp_c']}°C, {DEFAULT_WEATHER_METADATA['description']}" in result["response"]
+        assert (
+            f"{DEFAULT_WEATHER_METADATA['temp_c']}°C, {DEFAULT_WEATHER_METADATA['description']}"
+            in result["response"]
+        )
 
     @pytest.mark.parametrize("input_city", ["paris", "LONDON", "dHaKa", "AMSTERDAM"])
     def test_case_insensitive_city_matching(self, input_city):
@@ -62,7 +99,15 @@ class TestWeatherStub:
     def test_response_structure(self):
         """Test that the response has the expected structure."""
         result = self.mock_weather.execute({"city": "Paris"})
-        expected_keys = {"raw", "response", "temp_c", "humidity", "description", "wind_speed", "city"}
+        expected_keys = {
+            "raw",
+            "response",
+            "temp_c",
+            "humidity",
+            "description",
+            "wind_speed",
+            "city",
+        }
 
         assert expected_keys.issubset(result.keys())
         assert isinstance(result["temp_c"], float)
