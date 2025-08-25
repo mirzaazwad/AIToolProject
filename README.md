@@ -109,12 +109,6 @@ The codebase implements several well-established design patterns:
 - **Purpose**: Ensures single instances of loggers across the application
 - **Implementation**: Metaclass-based singleton for consistent logging
 
-### 5. **Factory Pattern**
-
-- **Location**: `data/schemas/tool.py`
-- **Purpose**: Creates tool suggestions with proper validation
-- **Implementation**: Factory functions like `create_calculator_suggestion()`
-
 ## Directory Structure
 
 ```
