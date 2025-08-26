@@ -259,4 +259,7 @@ class TestGeminiStrategy:
 
     def test_content_type_header(self):
         """Test that content type header is correctly set."""
-        assert self.strategy.apiClient.default_headers["Content-Type"] == "application/json"
+        assert (
+            self.strategy.apiClient.default_headers["Content-Type"]
+            == "application/json"
+        )

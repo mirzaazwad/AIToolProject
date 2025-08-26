@@ -21,10 +21,10 @@ class Application:
     def __init__(self):
         """Initialize the application"""
         load_dotenv()
-        self.agent: Agent|None = None
-        self.question: str|None = None
+        self.agent: Agent | None = None
+        self.question: str | None = None
         self.verbose: bool = False
-        self.parser: argparse.ArgumentParser|None = None
+        self.parser: argparse.ArgumentParser | None = None
         self.agent_type: str = "gemini"
 
     def run(self):

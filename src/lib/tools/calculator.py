@@ -49,7 +49,6 @@ class Calculator(Action):
             tokens.append(num)
         return tokens
 
-
     def _is_number(self, token: str) -> bool:
         """Check if token is a valid number (int or float)."""
         return token.replace(".", "", 1).isdigit()
@@ -74,20 +73,27 @@ class Calculator(Action):
             return a**b
         raise EvaluationError(f"Unknown operator: '{op}'")
 
-    def _handle_operator(self, token: str, stack: list[str], output: list[str], precedence: dict):
+    def _handle_operator(
+        self, token: str, stack: list[str], output: list[str], precedence: dict
+    ):
         """Handle operator tokens according to precedence rules."""
-        while stack and stack[-1] in precedence and precedence[stack[-1]] >= precedence[token]:
+        while (
+            stack
+            and stack[-1] in precedence
+            and precedence[stack[-1]] >= precedence[token]
+        ):
             output.append(stack.pop())
         stack.append(token)
 
-    def _handle_closing_bracket(self, token: str, stack: list[str], output: list[str], closing: dict):
+    def _handle_closing_bracket(
+        self, token: str, stack: list[str], output: list[str], closing: dict
+    ):
         """Handle closing bracket by unwinding stack until matching opening bracket."""
         while stack and stack[-1] != closing[token]:
             output.append(stack.pop())
         if not stack:
             raise BracketMismatchError("Mismatched closing bracket")
         stack.pop()
-
 
     def _to_postfix(self, tokens: list[str]) -> list[str]:
         """Convert infix tokens to postfix notation using Shunting Yard algorithm."""

@@ -36,7 +36,9 @@ class TestOpenAIStrategy:
         with patch.dict(os.environ, {"OPENAI_API_KEY": "test-key"}):
             strategy = OpenAIStrategy()
             assert strategy.apiClient.base_url == OPENAI_API_URL
-            assert "Bearer" in str(strategy.apiClient.default_headers.get("Authorization", ""))
+            assert "Bearer" in str(
+                strategy.apiClient.default_headers.get("Authorization", "")
+            )
 
     def test_initialization_without_api_key(self):
         """Test OpenAI strategy initializes with None API key."""

@@ -39,12 +39,9 @@ class CurrencyConverter(Action):
         except Exception as e:
             raise CurrencyAPIError(f"Currency conversion failed: {str(e)}")
 
-
     def _fetch_conversion_data(self, request: CurrencyConversionRequest):
         """Fetch conversion data from API and handle HTTP errors."""
-        raw_response = self.apiClient.get(
-            "/latest", params=request.to_query_params()
-        )
+        raw_response = self.apiClient.get("/latest", params=request.to_query_params())
 
         if raw_response.status_code == 400:
             raise InvalidCurrencyError("Invalid currency code provided")

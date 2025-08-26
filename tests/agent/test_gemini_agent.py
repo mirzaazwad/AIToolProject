@@ -332,9 +332,9 @@ class TestGeminiAgent:
             assert result != FAILED_AGENT_MESSAGE
             mock_log.assert_called_once()
             args = mock_log.call_args[0]
-            assert args[0] == "What is 2+2?"  
+            assert args[0] == "What is 2+2?"
             assert args[1] == "Success"
-            assert isinstance(args[2], float) 
+            assert isinstance(args[2], float)
 
     def test_failure_logging(self):
         """Test that failed queries are logged correctly."""
@@ -347,16 +347,16 @@ class TestGeminiAgent:
             result = self.agent.answer("test query")
             assert result == FAILED_AGENT_MESSAGE
 
- 
             mock_log.assert_called_once()
             args = mock_log.call_args[0]
-            assert args[0] == "test query"  
-            assert "Test error" in args[1]  
-            assert isinstance(args[2], float)  
+            assert args[0] == "test query"
+            assert "Test error" in args[1]
+            assert isinstance(args[2], float)
 
     def test_tool_plan_logging(self):
         """Test that tool plans are logged correctly."""
         from src.lib.loggers import agent_logger
+
         mock_tool_plan = self._create_mock_tool_plan()
 
         with patch.object(
@@ -410,6 +410,7 @@ class TestGeminiAgent:
     def test_query_start_logging(self):
         """Test that query start is logged correctly."""
         from src.lib.loggers import agent_logger
+
         mock_tool_plan = self._create_mock_tool_plan()
 
         with patch.object(
@@ -428,4 +429,4 @@ class TestGeminiAgent:
 
             mock_log.assert_called_once()
             args = mock_log.call_args[0]
-            assert args[0] == "What is 2+2?"  
+            assert args[0] == "What is 2+2?"
