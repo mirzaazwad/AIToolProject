@@ -30,7 +30,7 @@ jobs:
         run: make test
 
       - name: Run quality checks
-        run: make quality
+        run: make quality-ci
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5

@@ -230,7 +230,10 @@ make test            # Run all tests with coverage (generates XML report)
 # Code Quality
 make fmt             # Format code with black, isort, and flake8
 make typecheck       # Type check with mypy
+make typecheck-ci    # Type check with mypy (CI mode)
 make quality         # Run formatting and type checking
+make quality-ci      # Run formatting and type checking (CI mode)
+
 
 # SonarQube
 make sonar_local     # Run SonarQube analysis locally with docker compose (requires SONAR_TOKEN_LOCAL)
@@ -739,7 +742,7 @@ pytest -q
 
 The project includes a Makefile for automated testing and development workflows:
 
-```bash
+````bash
 # Set up development environment (creates venv and installs dependencies)
 make setup
 
@@ -755,21 +758,46 @@ make run
 # Format code
 make fmt
 
-# Type check
+# Type check (development)
 make typecheck
+
+# Type check (CI environment)
+make typecheck-ci
+
+# Type check (CI environment)
+mypy src/ --config-file=mypy-ci.ini
 
 # Quality check (formatting + type checking)
 make quality
 
+# Quality check (CI environment)
+make quality-ci
+
+#### 🔧 MyPy Configuration Options
+
+The project includes two MyPy configurations:
+
+- **`mypy.ini`** - Development configuration with balanced type checking
+- **`mypy-ci.ini`** - CI-friendly configuration with relaxed import resolution
+
+**For CI/CD pipelines**, use the CI configuration to avoid import resolution issues:
+```bash
+mypy src/ --config-file=mypy-ci.ini
+````
+
 # Run local SonarQube analysis (requires SONAR_TOKEN_LOCAL)
+
 make sonar_local
 
 # Run SonarCloud analysis (requires SONAR_TOKEN_CLOUD)
+
 make sonar_cloud
 
 # Clean generated files
+
 make clean
-```
+
+````
 
 #### **Complete Makefile Commands Reference**
 
@@ -815,7 +843,7 @@ echo "SONAR_TOKEN_CLOUD=your_cloud_token_here" >> .env
 # Verify tokens are set
 echo $SONAR_TOKEN_LOCAL
 echo $SONAR_TOKEN_CLOUD
-```
+````
 
 **SonarQube Token Requirements:**
 

@@ -45,8 +45,12 @@ fmt:
 typecheck:
 	mypy src/ --config-file=mypy.ini
 
+typecheck-ci:
+	mypy src/ --config-file=mypy-ci.ini
+
 quality: fmt typecheck
 
+quality-ci: fmt typecheck-ci
 
 clean:
 	rm -rf .pytest_cache/
