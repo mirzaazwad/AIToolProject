@@ -2,9 +2,10 @@
 Tool-specific logger for tracking tool executions and results.
 """
 
-from .base import BaseLogger
-from ...data.schemas.logging.metrics import ToolMetrics
 from typing import Union
+
+from ...data.schemas.logging.metrics import ToolMetrics
+from .base import BaseLogger
 
 
 class ToolLogger(BaseLogger):

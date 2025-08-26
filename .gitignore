@@ -21,3 +21,6 @@ logs
 
 # Remove ScannarWork
 .scannerwork
+
+#Removed
+.coverage

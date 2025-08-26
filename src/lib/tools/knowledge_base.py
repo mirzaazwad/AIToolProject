@@ -1,22 +1,20 @@
 """Knowledge Base Tool"""
 
-from .base import Action
-from ...data.schemas.tools.knowledge_base import KnowledgeBase as knowledge_baseSchema
-
-from ..errors.tools.knowledge_base import (
-    RetrievalError,
-    QueryError,
-    InsertionError,
-    LoadingError,
-)
-from ...data.schemas.tools.knowledge_base import KnowledgeEntry
 import os
+from typing import Optional
+
+from ...data.schemas.tools.knowledge_base import \
+    KnowledgeBase as knowledge_baseSchema
+from ...data.schemas.tools.knowledge_base import KnowledgeEntry
+from ..errors.tools.knowledge_base import (InsertionError, LoadingError,
+                                           QueryError, RetrievalError)
+from .base import Action
 
 
 class KnowledgeBase(Action):
     """Knowledge base tool with character-based Jaccard similarity search."""
 
-    def __init__(self, knowledge_base_file_path: str = None):
+    def __init__(self, knowledge_base_file_path: Optional[str] = None):
         """
         Initialize knowledge base.
 
@@ -60,31 +58,33 @@ class KnowledgeBase(Action):
             String with summary only or error message
         """
         if "query" not in args:
-            raise QueryError(f"'query' parameter is required for knowledge base search")
+            raise QueryError("'query' parameter is required for knowledge base search")
 
         query = args["query"]
         if not query or not isinstance(query, str):
-            raise QueryError(f"Query must be a non-empty string")
+            raise QueryError("Query must be a non-empty string")
         search_result = self.search(query)
-        most_relevant_entry = search_result[0]
+        most_relevant_entry = search_result[0] if search_result else None
+        if not most_relevant_entry:
+            raise RetrievalError(f"No entries found for query: '{query}'")
         return most_relevant_entry
 
     def search(
-        self, query: str, threshold: float = 0.1, max_results: int = 3
+        self, query: str, threshold: float = 0.75, max_results: int = 1
     ) -> list[KnowledgeEntry]:
         """
         Search knowledge base using character-based Jaccard similarity.
 
         Args:
             query: Search query string
-            threshold: Minimum similarity threshold (default: 0.1)
-            max_results: Maximum number of results to return (default: 3)
+            threshold: Minimum similarity threshold (default: 0.75)
+            max_results: Maximum number of results to return (default: 1)
 
         Returns:
             Dict with {"entry": name, "summary": summary} or error string
         """
         if not query.strip():
-            raise QueryError(f"Empty query provided")
+            raise QueryError("Empty query provided")
 
         results = self.knowledge_base.search(
             query, threshold=threshold, max_results=max_results
@@ -117,7 +117,7 @@ class KnowledgeBase(Action):
 
         return entries
 
-    def add_entry(self, name: str, summary: str, category: str = None):
+    def add_entry(self, name: str, summary: str, category: Optional[str] = None):
         """
         Add a new entry to the knowledge base.
 

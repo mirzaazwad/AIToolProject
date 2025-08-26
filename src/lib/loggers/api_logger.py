@@ -2,9 +2,10 @@
 API-specific logger for tracking API calls and responses.
 """
 
-from .base import BaseLogger
-from ...data.schemas.logging.api_logging import SuccessfulAPICallLog, FailedAPICallLog
+from ...data.schemas.logging.api_logging import (FailedAPICallLog,
+                                                 SuccessfulAPICallLog)
 from ...data.schemas.logging.metrics import APIMetrics
+from .base import BaseLogger
 
 
 class ApiLogger(BaseLogger):

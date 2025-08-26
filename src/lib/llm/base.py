@@ -1,14 +1,12 @@
 """Abstract Base Class for LLM Strategies"""
 
 from abc import ABC, abstractmethod
-from ..api import ApiClient
-from ...data.schemas.tools.tool import ToolPlan
-from ...constants.llm import (
-    SYSTEM_PROMPT_CONTEXT,
-    TOOL_SUGGESTION_EXAMPLES,
-    TOOL_SYSTEM_ROLE,
-)
+
+from ...constants.llm import (SYSTEM_PROMPT_CONTEXT, TOOL_SUGGESTION_EXAMPLES,
+                              TOOL_SYSTEM_ROLE)
 from ...constants.messages import TOOL_SUGGESTION_FORMAT
+from ...data.schemas.tools.tool import ToolPlan
+from ..api import ApiClient
 
 
 class LLMStrategy(ABC):
@@ -48,10 +46,10 @@ class LLMStrategy(ABC):
         """
 
         system_prompt = f"""
-        Role: 
+        Role:
         {TOOL_SYSTEM_ROLE}
 
-        Context: 
+        Context:
         {SYSTEM_PROMPT_CONTEXT}
 
         Response Format: Return ONLY a valid JSON array of tool suggestions in this exact format:

@@ -3,10 +3,9 @@ Pytest configuration file.
 This file is automatically loaded by pytest and sets up the test environment.
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
-
 
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))

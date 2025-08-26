@@ -1,7 +1,8 @@
 """Schema for Currency Conversion"""
 
-from pydantic import BaseModel, field_validator, ValidationError, Field
-from typing import Union, Dict
+from typing import Dict, Union
+
+from pydantic import BaseModel, Field, field_validator
 
 
 class CurrencyConversionRequest(BaseModel):
@@ -13,7 +14,7 @@ class CurrencyConversionRequest(BaseModel):
     @classmethod
     def amount_must_be_positive(cls, v):
         if v <= 0:
-            raise ValidationError("Amount must be greater than 0")
+            raise ValueError("Amount must be greater than 0")
         return v
 
     def to_query_params(self) -> dict[str, Union[str, float]]:

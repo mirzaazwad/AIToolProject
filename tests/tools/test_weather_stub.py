@@ -1,93 +1,93 @@
 """Tests for Weather Stub Tool"""
 
 import pytest
-from tests.stubs.tools.weather import MockWeather
-from tests.constants.weather import (
-    CITY_TEMPERATURE,
-    DEFAULT_WEATHER_METADATA,
-)
+
+from tests.utils.constants.weather import (CITY_TEMPERATURE,
+                                           DEFAULT_WEATHER_METADATA)
+from tests.utils.stubs.tools.weather import MockWeather
 
 
+@pytest.mark.usefixtures("weather_fixture")
 class TestWeatherStub:
     """Test suite for Weather stub tool."""
 
-    def setup_method(self):
-        """Set up test fixtures."""
+    @pytest.fixture(autouse=True)
+    def weather_fixture(self):
+        """Fixture that provides a MockWeather instance for each test."""
         self.mock_weather = MockWeather()
 
-    def test_known_city_paris(self):
-        """Test weather stub for Paris."""
-        result = self.mock_weather.execute({"city": "Paris"})
+    @pytest.mark.parametrize(
+        "city, expected",
+        [
+            (
+                "Paris",
+                {
+                    "temp_c": 18.0,
+                    "description": "cloudy and mild.",
+                    "humidity": 60,
+                    "wind_speed": 3.2,
+                },
+            ),
+            (
+                "London",
+                {
+                    "temp_c": 17.0,
+                    "description": "cold and rainy.",
+                    "humidity": 70,
+                    "wind_speed": 4.1,
+                },
+            ),
+            (
+                "Dhaka",
+                {
+                    "temp_c": 31.0,
+                    "description": "humid and hot.",
+                    "humidity": 85,
+                    "wind_speed": 2.5,
+                },
+            ),
+            (
+                "Amsterdam",
+                {
+                    "temp_c": 19.5,
+                    "description": "windy and cloudy.",
+                    "humidity": 65,
+                    "wind_speed": 3.8,
+                },
+            ),
+        ],
+    )
+    def test_known_cities(self, city, expected):
+        """Test weather stub for known cities."""
+        result = self.mock_weather.execute({"city": city})
 
-        assert result["city"] == "Paris"
-        assert result["temp_c"] == 18.0
-        assert result["description"] == "cloudy and mild."
-        assert result["humidity"] == 60
-        assert result["wind_speed"] == 3.2
-        assert "18.0°C, cloudy and mild." in result["response"]
-
-    def test_known_city_london(self):
-        """Test weather stub for London."""
-        result = self.mock_weather.execute({"city": "London"})
-
-        assert result["city"] == "London"
-        assert result["temp_c"] == 17.0
-        assert result["description"] == "cold and rainy."
-        assert result["humidity"] == 70
-        assert result["wind_speed"] == 4.1
-        assert "17.0°C, cold and rainy." in result["response"]
-
-    def test_known_city_dhaka(self):
-        """Test weather stub for Dhaka."""
-        result = self.mock_weather.execute({"city": "Dhaka"})
-
-        assert result["city"] == "Dhaka"
-        assert result["temp_c"] == 31.0
-        assert result["description"] == "humid and hot."
-        assert result["humidity"] == 85
-        assert result["wind_speed"] == 2.5
-        assert "31.0°C, humid and hot." in result["response"]
-
-    def test_known_city_amsterdam(self):
-        """Test weather stub for Amsterdam."""
-        result = self.mock_weather.execute({"city": "Amsterdam"})
-
-        assert result["city"] == "Amsterdam"
-        assert result["temp_c"] == 19.5
-        assert result["description"] == "windy and cloudy."
-        assert result["humidity"] == 65
-        assert result["wind_speed"] == 3.8
-        assert "19.5°C, windy and cloudy." in result["response"]
+        assert result["city"] == city
+        assert result["temp_c"] == expected["temp_c"]
+        assert result["description"] == expected["description"]
+        assert result["humidity"] == expected["humidity"]
+        assert result["wind_speed"] == expected["wind_speed"]
+        assert (
+            f"{expected['temp_c']}°C, {expected['description']}" in result["response"]
+        )
 
     def test_unknown_city_uses_defaults(self):
         """Test weather stub for unknown city uses default values."""
         result = self.mock_weather.execute({"city": "UnknownCity"})
 
         assert result["city"] == "UnknownCity"
-        assert result["temp_c"] == DEFAULT_WEATHER_METADATA["temp_c"]
-        assert result["description"] == DEFAULT_WEATHER_METADATA["description"]
-        assert result["humidity"] == DEFAULT_WEATHER_METADATA["humidity"]
-        assert result["wind_speed"] == DEFAULT_WEATHER_METADATA["wind_speed"]
+        for key, value in DEFAULT_WEATHER_METADATA.items():
+            assert result[key] == value
         assert (
             f"{DEFAULT_WEATHER_METADATA['temp_c']}°C, {DEFAULT_WEATHER_METADATA['description']}"
             in result["response"]
         )
 
-    def test_case_insensitive_city_matching(self):
+    @pytest.mark.parametrize("input_city", ["paris", "LONDON", "dHaKa", "AMSTERDAM"])
+    def test_case_insensitive_city_matching(self, input_city):
         """Test that city matching is case insensitive."""
-        test_cases = [
-            ("paris", "paris"),
-            ("LONDON", "LONDON"),
-            ("dHaKa", "dHaKa"),
-            ("AMSTERDAM", "AMSTERDAM"),
-        ]
-
-        for input_city, expected_city in test_cases:
-            result = self.mock_weather.execute({"city": input_city})
-            assert result["city"] == expected_city
-
-            expected_temp = float(CITY_TEMPERATURE[input_city.lower()])
-            assert result["temp_c"] == expected_temp
+        result = self.mock_weather.execute({"city": input_city})
+        assert result["city"] == input_city
+        assert result["temp_c"] == float(CITY_TEMPERATURE[input_city.lower()])
 
     def test_city_with_whitespace(self):
         """Test city names with leading/trailing whitespace."""
@@ -96,14 +96,12 @@ class TestWeatherStub:
         assert result["city"] == "Paris"
         assert result["temp_c"] == 18.0
         assert result["description"] == "cloudy and mild."
-
         assert "Paris" in result["response"]
 
     def test_response_structure(self):
         """Test that the response has the expected structure."""
         result = self.mock_weather.execute({"city": "Paris"})
-
-        expected_keys = [
+        expected_keys = {
             "raw",
             "response",
             "temp_c",
@@ -111,10 +109,9 @@ class TestWeatherStub:
             "description",
             "wind_speed",
             "city",
-        ]
-        for key in expected_keys:
-            assert key in result
+        }
 
+        assert expected_keys.issubset(result.keys())
         assert isinstance(result["temp_c"], float)
         assert isinstance(result["humidity"], int)
         assert isinstance(result["wind_speed"], float)
@@ -123,10 +120,9 @@ class TestWeatherStub:
         assert isinstance(result["city"], str)
 
     def test_temperature_conversion_consistency(self):
-        """Test that temperature conversion is consistent."""
+        """Test that temperature conversion is consistent across all cities."""
         for city_key, raw_temp in CITY_TEMPERATURE.items():
             result = self.mock_weather.execute({"city": city_key.title()})
-
             expected_temp = float(raw_temp)
             assert result["temp_c"] == expected_temp
             assert str(expected_temp) in result["response"]
@@ -138,36 +134,27 @@ class TestWeatherStub:
 
         assert "18.0°C" in response
         assert "cloudy and mild." in response
-
         assert "°C," in response
 
     def test_metadata_fallback(self):
         """Test metadata fallback for cities with partial data."""
-
         result = self.mock_weather.execute({"city": "UnknownTestCity"})
-
-        assert result["temp_c"] == DEFAULT_WEATHER_METADATA["temp_c"]
-        assert result["description"] == DEFAULT_WEATHER_METADATA["description"]
-        assert result["humidity"] == DEFAULT_WEATHER_METADATA["humidity"]
-        assert result["wind_speed"] == DEFAULT_WEATHER_METADATA["wind_speed"]
+        for key, value in DEFAULT_WEATHER_METADATA.items():
+            assert result[key] == value
 
     def test_empty_city_name(self):
         """Test behavior with empty city name."""
-
         with pytest.raises(ValueError, match="City name cannot be empty"):
             self.mock_weather.execute({"city": ""})
 
-    def test_numeric_temperature_handling(self):
+    @pytest.mark.parametrize(
+        "city, expected_temp",
+        [("Paris", 18.0), ("London", 17.0), ("Amsterdam", 19.5)],
+    )
+    def test_numeric_temperature_handling(self, city, expected_temp):
         """Test that both string and numeric temperatures are handled correctly."""
-
-        result_paris = self.mock_weather.execute({"city": "Paris"})
-        assert result_paris["temp_c"] == 18.0
-
-        result_london = self.mock_weather.execute({"city": "London"})
-        assert result_london["temp_c"] == 17.0
-
-        result_amsterdam = self.mock_weather.execute({"city": "Amsterdam"})
-        assert result_amsterdam["temp_c"] == 19.5
+        result = self.mock_weather.execute({"city": city})
+        assert result["temp_c"] == expected_temp
 
     def test_weather_response_object_structure(self):
         """Test that the WeatherResponse object is properly structured."""
@@ -176,6 +163,5 @@ class TestWeatherStub:
 
         assert isinstance(response_text, str)
         assert len(response_text) > 0
-
         assert "18.0°C" in response_text
         assert "cloudy and mild." in response_text

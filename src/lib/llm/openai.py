@@ -1,12 +1,14 @@
 """Strategy Pattern Application for OpenAI"""
 
-from .base import LLMStrategy
-from ..api import ApiClient
-from ...data.schemas.tools.tool import ToolPlan
-from ...constants.llm import OPENAI_API_URL, OPENAI_MODEL
-from ..errors.llms.openai import OpenAIError
-from os import getenv
 import re
+from os import getenv
+from typing import Optional
+
+from ...constants.llm import OPENAI_API_URL, OPENAI_MODEL
+from ...data.schemas.tools.tool import ToolPlan
+from ..api import ApiClient
+from ..errors.llms.openai import OpenAIError
+from .base import LLMStrategy
 
 
 class OpenAIStrategy(LLMStrategy):
@@ -14,7 +16,9 @@ class OpenAIStrategy(LLMStrategy):
 
     def __init__(self):
         self.apiClient = ApiClient(base_url=OPENAI_API_URL)
-        self.apiClient.set_auth_header(getenv("OPENAI_API_KEY"), "Bearer")
+        api_key = getenv("OPENAI_API_KEY")
+        if api_key:
+            self.apiClient.set_auth_header(api_key, "Bearer")
         self.apiClient.set_default_headers({"Content-Type": "application/json"})
 
     def query(self, prompt: str) -> str:
@@ -22,17 +26,7 @@ class OpenAIStrategy(LLMStrategy):
 
         try:
             response = self.apiClient.post("/responses", json_data=data)
-            response_data = response.json()
-
-            if "output" in response_data and len(response_data["output"]) > 0:
-                output = response_data["output"][0]
-                if "content" in output and len(output["content"]) > 0:
-                    content_item = output["content"][0]
-                    if content_item["type"] == "output_text":
-                        return content_item["text"]
-
-            raise OpenAIError("No valid response from OpenAI")
-
+            return self._extract_text_response(response.json())
         except Exception as e:
             raise OpenAIError(f"Error querying OpenAI: {str(e)}")
 
@@ -41,25 +35,34 @@ class OpenAIStrategy(LLMStrategy):
 
         try:
             response = self.apiClient.post("/responses", json_data=data)
-            response_data = response.json()
+            content = self._extract_text_response(response.json(), default="").strip()
 
-            if "output" in response_data and len(response_data["output"]) > 0:
-                output = response_data["output"][0]
-                if "content" in output and len(output["content"]) > 0:
-                    content_item = output["content"][0]
-                    if content_item["type"] == "output_text":
-                        content = content_item["text"].strip()
+            if not content:
+                return ToolPlan(suggestions=[])
 
-                        json_match = re.search(r"\[.*\]", content, re.DOTALL)
-                        if json_match:
-                            json_str = json_match.group(0)
-                            return ToolPlan.from_json_string(json_str)
-                        else:
-                            return ToolPlan.from_json_string(content)
-
-            return ToolPlan(suggestions=[])
+            return self._parse_tool_plan(content)
 
         except Exception as e:
             raise OpenAIError(
                 f"Error refining prompt to obtain tool suggestions: {str(e)}"
             )
+
+    def _extract_text_response(
+        self, response_data: dict, default: Optional[str] = None
+    ) -> str:
+        """Extract text from OpenAI-like response JSON."""
+        outputs = response_data.get("output", [])
+        if not outputs:
+            raise OpenAIError("No output found in OpenAI response")
+
+        content_items = outputs[0].get("content", [])
+        for item in content_items:
+            if item.get("type") == "output_text":
+                return item.get("text", default)
+        raise OpenAIError("No text response found in OpenAI output")
+
+    def _parse_tool_plan(self, content: str) -> ToolPlan:
+        """Parse raw model output into a ToolPlan."""
+        json_match = re.search(r"\[.*\]", content, re.DOTALL)
+        json_str = json_match.group(0) if json_match else content
+        return ToolPlan.from_json_string(json_str)

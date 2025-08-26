@@ -1,7 +1,9 @@
 """Schemas for API call logging."""
 
+from typing import Dict, Optional, Union
+
 from pydantic import BaseModel, Field
-from typing import Optional, Union, Dict
+
 from ....constants.api import StatusCodes
 
 

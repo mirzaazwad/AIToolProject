@@ -1,0 +1,41 @@
+name: Master Tests
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Create .env file from secrets
+        run: |
+          echo "GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}" >> .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }}" >> .env
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Run tests with coverage
+        run: make test
+
+      - name: Run quality checks
+        run: make quality-ci
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Cleanup .env
+        run: rm -f .env

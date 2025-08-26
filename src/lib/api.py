@@ -1,11 +1,14 @@
 """Generic API Client"""
 
-import requests
 import time
 from typing import Optional, Union
-from .loggers import api_logger
-from ..data.schemas.logging.api_logging import SuccessfulAPICallLog, FailedAPICallLog
+
+import requests
+
 from ..constants.api import StatusCodes
+from ..data.schemas.logging.api_logging import (FailedAPICallLog,
+                                                SuccessfulAPICallLog)
+from .loggers import api_logger
 
 
 class ApiClient:

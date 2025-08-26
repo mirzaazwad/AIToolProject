@@ -1,9 +1,9 @@
 """Schema for Tool Suggestion"""
 
-from typing import Union
-from pydantic import BaseModel, Field, field_validator, ConfigDict
 import json
+from typing import Union
 
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 ToolArgValue = Union[str, float, int]
 ToolArgs = dict[str, ToolArgValue]

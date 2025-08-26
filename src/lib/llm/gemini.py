@@ -1,12 +1,13 @@
 """Strategy Pattern Application for Google Gemini"""
 
-from .base import LLMStrategy
-from ..api import ApiClient
-from ...data.schemas.tools.tool import ToolPlan
-from ...constants.llm import GEMINI_API_URL, GEMINI_MODEL
-from ..errors.llms.gemini import GeminiError
-from os import getenv
 import re
+from os import getenv
+
+from ...constants.llm import GEMINI_API_URL, GEMINI_MODEL
+from ...data.schemas.tools.tool import ToolPlan
+from ..api import ApiClient
+from ..errors.llms.gemini import GeminiError
+from .base import LLMStrategy
 
 
 class GeminiStrategy(LLMStrategy):
@@ -14,12 +15,11 @@ class GeminiStrategy(LLMStrategy):
 
     def __init__(self):
         self.apiClient = ApiClient(base_url=GEMINI_API_URL)
-        self.apiClient.set_default_headers(
-            {
-                "Content-Type": "application/json",
-                "X-goog-api-key": getenv("GEMINI_API_KEY"),
-            }
-        )
+        headers = {"Content-Type": "application/json"}
+        api_key = getenv("GEMINI_API_KEY")
+        if api_key:
+            headers["X-goog-api-key"] = api_key
+        self.apiClient.set_default_headers(headers)
 
     def query(self, prompt: str) -> str:
         try:

@@ -29,6 +29,10 @@ FUSE_FORMAT_MESSAGE = """
             Answer: English mathematician and writer, pioneer of computing.
             Format: string
 
+            Prompt: Who is Unknown Person?
+            Answer: Unable to find information on Unknown Person.
+            Format: string
+
             Prompt: Add 10 to the average temperature in Paris and London right now.
             Answer: 28.0°C
             Format: string, [float]°C

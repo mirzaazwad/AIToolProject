@@ -1,6 +1,6 @@
-from .base import Agent
 from ..llm.gemini import GeminiStrategy
 from ..tools.tool_invoker import ToolInvoker
+from .base import Agent
 
 
 class GeminiAgent(Agent):

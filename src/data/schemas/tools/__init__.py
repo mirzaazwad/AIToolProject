@@ -1,0 +1,1 @@
+"""Tool-related schema definitions."""

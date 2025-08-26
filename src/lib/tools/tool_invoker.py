@@ -1,19 +1,23 @@
 """Tool Invoker using Command Pattern"""
 
-from .calculator import Calculator
-from .weather import Weather
-from .knowledge_base import KnowledgeBase
-from .currency_converter import CurrencyConverter
-from .base import ToolInvokerBase
-from ...constants.tools import Tool
-from ..loggers import tool_logger
-from typing import Union
 import time
+from typing import Union
+
+from ...constants.tools import Tool
 from ..errors.tools.invoker import InvokerError
+from ..loggers import tool_logger
+from .base import Action, ToolInvokerBase
+from .calculator import Calculator
+from .currency_converter import CurrencyConverter
+from .knowledge_base import KnowledgeBase
+from .weather import Weather
 
 
 class ToolInvoker(ToolInvokerBase):
     """Invoker class for executing tools using Command Pattern"""
+
+    __action: Action
+    __current_tool: str
 
     def set_action(self, tool_type: str) -> None:
         """Set the action/tool to be executed."""

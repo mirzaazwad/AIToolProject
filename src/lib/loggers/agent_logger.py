@@ -2,8 +2,10 @@
 Agent-specific logger for tracking high-level agent operations and workflows.
 """
 
-from .base import BaseLogger
+from typing import Optional
+
 from ...data.schemas.logging.metrics import AgentMetrics
+from .base import BaseLogger
 
 
 class AgentLogger(BaseLogger):
@@ -15,7 +17,7 @@ class AgentLogger(BaseLogger):
         if not hasattr(self, "metrics"):
             self.metrics = AgentMetrics()
 
-    def log_query_start(self, query: str, session_id: str = None) -> None:
+    def log_query_start(self, query: str, session_id: Optional[str] = None) -> None:
         """Log the start of query processing."""
         self.metrics.queries_processed += 1
 
@@ -70,7 +72,7 @@ class AgentLogger(BaseLogger):
         self.warning(f"PARSING_ERROR: {error}")
         self.debug(f"Problematic response: {response_str}")
 
-    def log_workflow_step(self, step: str, details: str = None) -> None:
+    def log_workflow_step(self, step: str, details: Optional[str] = None) -> None:
         """Log workflow step execution."""
         message = f"WORKFLOW_STEP: {step}"
         if details:
@@ -85,7 +87,7 @@ class AgentLogger(BaseLogger):
 
     def log_tool_plan(self, tools: list[dict[str, str | list[str]]]) -> None:
         """Log the planned tool execution sequence."""
-        tool_names = [tool.get("tool", "unknown") for tool in tools]
+        tool_names = [str(tool.get("tool", "unknown")) for tool in tools]
         self.info(f"TOOL_PLAN: Executing tools in sequence: {' -> '.join(tool_names)}")
 
         for i, tool in enumerate(tools):
