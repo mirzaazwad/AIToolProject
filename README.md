@@ -1185,7 +1185,6 @@ The project has **two GitHub Actions workflows** for different branches:
 - **Trigger**: Push/PR to `improvements` branch
 - **Purpose**: Development and enhancement validation
 - **Steps**:
-  - Multi-version Python testing
   - Extended test coverage analysis
   - Code quality checks
   - Performance benchmarking
