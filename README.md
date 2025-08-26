@@ -178,9 +178,14 @@ The codebase implements several well-established design patterns:
 │   ├── api.log              # API interaction logs
 │   └── tool.log             # Tool execution logs
 └── tests/                    # Test suite
-    ├── constants/           # Test constants
-    ├── stubs/               # Test doubles and mocks
-    └── test_*.py            # Unit tests for each component
+    ├── utils/           	 # Contains relevant stubs and constants
+	|	├── constants/		 # Test constants
+	|   └── stubs/		 	# Test doubles and mocks
+	├── llm/				# Unit tests relevant to llms
+	├── agent/				# Unit tests relevant to agents
+	├── tools/				# Unit tests relevant to the tools
+	├── test_*_smoke.py		# Smoke Integration tests for each agent
+    └── test_*.py            # Generic unit tests for global modules
 ```
 
 ## 📦 Dependencies
@@ -224,7 +229,8 @@ make test            # Run all tests with coverage (generates XML report)
 
 # Code Quality
 make fmt             # Format code with black
-make sonar           # Run SonarQube analysis (requires SONAR_TOKEN)
+make sonar_local     # Run SonarQube analysis locally with docker compose (requires SONAR_TOKEN_LOCAL)
+make sonar_cloud     # Run SonarQube analysis in sonarqube cloud (requires SONAR_TOKEN_CLOUD)
 
 # Application
 make run             # Run the application with example query
@@ -258,9 +264,14 @@ run:
 fmt:
 	black .
 
-# SonarQube analysis
-sonar:
-	sonar-scanner -Dsonar.projectKey=AIToolProject -Dsonar.sources=. -Dsonar.host.url=http://localhost:4000 -Dsonar.login=$$SONAR_TOKEN
+# Run local SonarQube analysis (requires SONAR_TOKEN_LOCAL)
+make sonar_local
+
+# Run SonarCloud analysis (requires SONAR_TOKEN_CLOUD)
+make sonar_cloud
+
+# Clean generated files
+make clean
 ```
 
 **Key Features:**
