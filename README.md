@@ -1167,7 +1167,7 @@ The initial codebase had several critical issues:
 - **Strategy Pattern**: Pluggable LLM providers (Gemini, OpenAI)
 - **Command Pattern**: Encapsulated tool execution with consistent interface
 - **Singleton Pattern**: Centralized logging with shared state
-- **Factory Pattern**: Validated tool suggestion creation
+- **Simple Factory Pattern**: Choose between multiple LLMs using a simple factory pattern
 
 #### 3. **Robustness Improvements**
 
@@ -1294,15 +1294,11 @@ The repository follows a **dual-branch strategy**:
 - **Quality**: Extended test suite, performance optimizations
 - **Focus**: Demonstrates potential enhancements that could be applied
 
-**Key Improvements in `improvements` branch:**
-
-- ✅ **Enhanced Test Coverage**: 180 tests (vs 90 in main)
-- ✅ **Improved Test Segregation**: Split smoke tests by agent type for better isolation
-- ✅ **Cognitive Complexity Reduction**: Optimized method complexity per SonarQube recommendations
-- ✅ **Advanced Error Handling**: More robust error scenarios
-- ✅ **Performance Optimizations**: Improved response times
-- ✅ **Extended LLM Support**: Comprehensive OpenAI and Gemini integration
-- ✅ **Enhanced Logging**: Detailed execution metrics
+#### ✅ **Submission Branch**
+- **Purpose**: Stable, production-ready code
+- **Features**: Core functionality with proven stability
+- **Quality**: All tests passing, ~70% coverage
+- **Deployment**: Ready for production use
 
 ### ✅ Quality Assurance
 
