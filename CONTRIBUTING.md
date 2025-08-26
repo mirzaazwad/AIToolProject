@@ -29,12 +29,14 @@ Before contributing, ensure you have:
 
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/optimizely-assignment-mirza-azwad.git
    cd optimizely-assignment-mirza-azwad
    ```
 
 3. **Set up the development environment**:
+
    ```bash
    make setup
    # or manually:
@@ -44,6 +46,7 @@ Before contributing, ensure you have:
    ```
 
 4. **Add upstream remote**:
+
    ```bash
    git remote add upstream https://github.com/ORIGINAL_OWNER/optimizely-assignment-mirza-azwad.git
    ```
@@ -61,6 +64,7 @@ The project follows a **dual-branch strategy** with specific contribution guidel
 ### Main Branches
 
 #### 🌟 **main** Branch
+
 - **Purpose**: Stable, production-ready code
 - **Protection**: Protected branch with required reviews
 - **Direct Commits**: ❌ Not allowed
@@ -70,6 +74,7 @@ The project follows a **dual-branch strategy** with specific contribution guidel
   - ✅ SonarCloud quality gate passed
 
 #### 🔧 **improvements** Branch
+
 - **Purpose**: Enhanced features and experimental improvements
 - **Protection**: Protected branch with required reviews
 - **Direct Commits**: ❌ Not allowed
@@ -106,13 +111,13 @@ git checkout -b docs/documentation-update
 
 ### Branch Naming Conventions
 
-| Branch Type | Format | Example | Target Branch |
-|-------------|--------|---------|---------------|
-| **Feature** | `feature/description` | `feature/add-translation-tool` | `main` or `improvements` |
-| **Bug Fix** | `fix/issue-description` | `fix/calculator-division-by-zero` | `main` |
-| **Documentation** | `docs/description` | `docs/update-api-documentation` | `main` |
-| **Hotfix** | `hotfix/critical-issue` | `hotfix/security-vulnerability` | `main` |
-| **Experimental** | `experiment/description` | `experiment/llm-caching` | `improvements` |
+| Branch Type       | Format                   | Example                           | Target Branch            |
+| ----------------- | ------------------------ | --------------------------------- | ------------------------ |
+| **Feature**       | `feature/description`    | `feature/add-translation-tool`    | `main` or `improvements` |
+| **Bug Fix**       | `fix/issue-description`  | `fix/calculator-division-by-zero` | `main`                   |
+| **Documentation** | `docs/description`       | `docs/update-api-documentation`   | `main`                   |
+| **Hotfix**        | `hotfix/critical-issue`  | `hotfix/security-vulnerability`   | `main`                   |
+| **Experimental**  | `experiment/description` | `experiment/llm-caching`          | `improvements`           |
 
 ## 🐛 Reporting Issues
 
@@ -132,18 +137,22 @@ git checkout -b docs/documentation-update
 A clear and concise description of the bug.
 
 **Steps to Reproduce**
+
 1. Run command: `python main.py "query"`
 2. Expected behavior: ...
 3. Actual behavior: ...
 
 **Environment**
+
 - OS: [e.g., Ubuntu 22.04, Windows 11, macOS 13]
 - Python Version: [e.g., 3.10.8]
 - Agent Type: [e.g., gemini, openai, stub]
 
 **Error Logs**
 ```
+
 Paste error logs here
+
 ```
 
 **Additional Context**
@@ -171,16 +180,16 @@ Any other relevant information.
 
 ### Issue Labels
 
-| Label | Description | Color |
-|-------|-------------|-------|
-| `bug` | Something isn't working | `#d73a4a` |
-| `enhancement` | New feature or request | `#a2eeef` |
-| `documentation` | Improvements to documentation | `#0075ca` |
-| `good first issue` | Good for newcomers | `#7057ff` |
-| `help wanted` | Extra attention is needed | `#008672` |
-| `priority: high` | High priority issue | `#b60205` |
-| `priority: medium` | Medium priority issue | `#fbca04` |
-| `priority: low` | Low priority issue | `#0e8a16` |
+| Label              | Description                   | Color     |
+| ------------------ | ----------------------------- | --------- |
+| `bug`              | Something isn't working       | `#d73a4a` |
+| `enhancement`      | New feature or request        | `#a2eeef` |
+| `documentation`    | Improvements to documentation | `#0075ca` |
+| `good first issue` | Good for newcomers            | `#7057ff` |
+| `help wanted`      | Extra attention is needed     | `#008672` |
+| `priority: high`   | High priority issue           | `#b60205` |
+| `priority: medium` | Medium priority issue         | `#fbca04` |
+| `priority: low`    | Low priority issue            | `#0e8a16` |
 
 ## 💡 Feature Requests
 
@@ -196,18 +205,21 @@ Any other relevant information.
 ### Feature Categories
 
 #### 🛠️ **New Tools**
+
 - Must follow the existing tool interface (`Action` base class)
 - Require comprehensive error handling
 - Need both unit and integration tests
 - Should include API documentation
 
 #### 🤖 **LLM Integrations**
+
 - Must implement the `LLMStrategy` interface
 - Require API key management
 - Need extensive error handling for API failures
 - Should include rate limiting considerations
 
 #### 🏗️ **Architecture Changes**
+
 - Require design document and discussion
 - Must maintain backward compatibility
 - Need comprehensive test coverage
@@ -218,17 +230,20 @@ Any other relevant information.
 ### Before Creating a PR
 
 1. **Sync with upstream**:
+
    ```bash
    git fetch upstream
    git rebase upstream/main  # or upstream/improvements
    ```
 
 2. **Run the full test suite**:
+
    ```bash
    make test
    ```
 
 3. **Check code formatting**:
+
    ```bash
    make fmt
    ```
@@ -242,32 +257,39 @@ Any other relevant information.
 
 ```markdown
 ## 📝 Description
+
 Brief description of changes made.
 
 ## 🔗 Related Issue
+
 Fixes #(issue number)
 
 ## 🧪 Testing
+
 - [ ] All existing tests pass
 - [ ] New tests added for new functionality
 - [ ] Manual testing completed
 
 ## 📋 Checklist
+
 - [ ] Code follows project style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated (if applicable)
 - [ ] No breaking changes (or clearly documented)
 
 ## 🖼️ Screenshots (if applicable)
+
 Add screenshots for UI changes.
 
 ## 📊 Performance Impact
+
 Describe any performance implications.
 ```
 
 ### PR Requirements
 
 #### ✅ **Required Checks**
+
 - **All tests passing** (180+ tests)
 - **Code coverage maintained** (90%+)
 - **SonarCloud quality gate** passed
@@ -275,6 +297,7 @@ Describe any performance implications.
 - **Descriptive commit messages**
 
 #### 📝 **Code Review Process**
+
 1. **Automated checks** must pass
 2. **At least one approval** from maintainers
 3. **Address review feedback** promptly
@@ -294,6 +317,7 @@ Follow the [Conventional Commits](https://www.conventionalcommits.org/) specific
 ```
 
 **Examples:**
+
 ```bash
 feat(tools): add translation tool with Google Translate API
 fix(calculator): handle division by zero gracefully
@@ -303,6 +327,7 @@ refactor(llm): simplify strategy pattern implementation
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -318,6 +343,7 @@ The project uses **GitHub Projects** for task management and coordination. Here'
 ### Project Boards
 
 #### 🎯 **Main Project Board**
+
 - **Location**: Repository → Projects → "AI Tool Agent Development"
 - **Purpose**: Track all development activities
 - **Views**:
@@ -327,18 +353,19 @@ The project uses **GitHub Projects** for task management and coordination. Here'
 
 #### 📋 **Board Columns**
 
-| Column | Description | Automation |
-|--------|-------------|------------|
-| **📥 Backlog** | New issues and feature requests | Auto-added when issue created |
-| **🔍 Triage** | Issues under review by maintainers | Manual assignment |
-| **📋 Ready** | Approved and ready for development | Manual move after approval |
-| **🚧 In Progress** | Currently being worked on | Auto-moved when PR linked |
-| **👀 Review** | Pull requests under review | Auto-moved when PR created |
-| **✅ Done** | Completed and merged | Auto-moved when PR merged |
+| Column             | Description                        | Automation                    |
+| ------------------ | ---------------------------------- | ----------------------------- |
+| **📥 Backlog**     | New issues and feature requests    | Auto-added when issue created |
+| **🔍 Triage**      | Issues under review by maintainers | Manual assignment             |
+| **📋 Ready**       | Approved and ready for development | Manual move after approval    |
+| **🚧 In Progress** | Currently being worked on          | Auto-moved when PR linked     |
+| **👀 Review**      | Pull requests under review         | Auto-moved when PR created    |
+| **✅ Done**        | Completed and merged               | Auto-moved when PR merged     |
 
 ### Assignment Process
 
 #### 🙋 **Self-Assignment**
+
 1. **Browse available issues** in "Ready" column
 2. **Comment on the issue**: "I'd like to work on this"
 3. **Wait for maintainer approval** (usually within 24 hours)
@@ -346,11 +373,13 @@ The project uses **GitHub Projects** for task management and coordination. Here'
 5. **Move to "In Progress"** when you start working
 
 #### 👥 **Maintainer Assignment**
+
 - **High Priority Issues**: Assigned by maintainers based on expertise
 - **Good First Issues**: Reserved for new contributors
 - **Complex Features**: Assigned to experienced contributors
 
 #### ⏰ **Assignment Rules**
+
 - **One issue per contributor** at a time (for new contributors)
 - **Two weeks maximum** per assignment
 - **Communicate delays** in issue comments
@@ -376,12 +405,14 @@ graph LR
 ### Project Labels & Priorities
 
 #### 🏷️ **Priority Labels**
+
 - `priority: critical` - Security issues, system down
 - `priority: high` - Important features, major bugs
 - `priority: medium` - Standard features, minor bugs
 - `priority: low` - Nice-to-have features, documentation
 
 #### 🎯 **Type Labels**
+
 - `type: bug` - Something isn't working
 - `type: feature` - New functionality
 - `type: enhancement` - Improvement to existing feature
@@ -389,6 +420,7 @@ graph LR
 - `type: refactor` - Code restructuring
 
 #### 🛠️ **Component Labels**
+
 - `component: tools` - Tool-related changes
 - `component: llm` - LLM strategy changes
 - `component: agent` - Agent logic changes
@@ -399,13 +431,14 @@ graph LR
 
 #### 🎯 **Current Milestones**
 
-| Milestone | Description | Target Date |
-|-----------|-------------|-------------|
-| **v1.0.0** | Production-ready release | Q1 2024 |
-| **v1.1.0** | Enhanced tool ecosystem | Q2 2024 |
-| **v1.2.0** | Advanced LLM integrations | Q3 2024 |
+| Milestone  | Description               | Target Date |
+| ---------- | ------------------------- | ----------- |
+| **v1.0.0** | Production-ready release  | Q1 2024     |
+| **v1.1.0** | Enhanced tool ecosystem   | Q2 2024     |
+| **v1.2.0** | Advanced LLM integrations | Q3 2024     |
 
 #### 📈 **Milestone Criteria**
+
 - **All critical issues** resolved
 - **Test coverage** maintained above 90%
 - **Documentation** updated
@@ -415,12 +448,14 @@ graph LR
 ### Communication Channels
 
 #### 💬 **Issue Comments**
+
 - **Progress updates** every few days
 - **Questions and clarifications**
 - **Design discussions**
 - **Review feedback**
 
 #### 📧 **Maintainer Contact**
+
 - **Complex issues**: Tag `@maintainer-username`
 - **Urgent matters**: Create high-priority issue
 - **General questions**: Use issue comments
@@ -428,12 +463,14 @@ graph LR
 ### Recognition & Credits
 
 #### 🏆 **Contributor Recognition**
+
 - **README credits** for significant contributions
 - **Release notes** mention for features
 - **GitHub contributor** statistics
 - **Special recognition** for outstanding work
 
 #### 📊 **Contribution Metrics**
+
 - **Issues resolved**
 - **PRs merged**
 - **Code quality improvements**
@@ -447,11 +484,13 @@ graph LR
 All contributions must include appropriate tests:
 
 #### ✅ **Required Test Types**
+
 - **Unit Tests**: For individual functions and classes
 - **Integration Tests**: For component interactions
 - **Smoke Tests**: For end-to-end workflows (if applicable)
 
 #### 📊 **Coverage Requirements**
+
 - **Minimum Coverage**: 90% for new code
 - **Existing Coverage**: Must not decrease
 - **Critical Paths**: 100% coverage required
@@ -459,6 +498,7 @@ All contributions must include appropriate tests:
 ### Writing Tests
 
 #### 🏗️ **Test Structure**
+
 ```python
 class TestNewFeature:
     """Test suite for new feature."""
@@ -488,11 +528,11 @@ class TestNewFeature:
 
 #### 🎯 **Test Categories**
 
-| Test Type | Location | Purpose | Example |
-|-----------|----------|---------|---------|
-| **Unit** | `tests/unit/` | Individual components | `test_calculator.py` |
+| Test Type       | Location             | Purpose               | Example                          |
+| --------------- | -------------------- | --------------------- | -------------------------------- |
+| **Unit**        | `tests/unit/`        | Individual components | `test_calculator.py`             |
 | **Integration** | `tests/integration/` | Component interaction | `test_agent_tool_integration.py` |
-| **Smoke** | `tests/smoke/` | End-to-end workflows | `test_gemini_smoke.py` |
+| **Smoke**       | `tests/smoke/`       | End-to-end workflows  | `test_gemini_smoke.py`           |
 
 ### Running Tests
 
@@ -517,12 +557,14 @@ pytest tests/smoke/ -v
 Follow **PEP 8** with project-specific conventions:
 
 #### 🎨 **Formatting**
+
 - **Line Length**: 88 characters (Black default)
 - **Indentation**: 4 spaces
 - **Quotes**: Double quotes for strings
 - **Imports**: Organized with `isort`
 
 #### 📝 **Naming Conventions**
+
 ```python
 # Classes: PascalCase
 class WeatherTool:
@@ -541,6 +583,7 @@ def _internal_method(self):
 ```
 
 #### 📚 **Documentation**
+
 ```python
 def calculate_percentage(value: float, percentage: float) -> float:
     """Calculate percentage of a value.
@@ -601,6 +644,7 @@ class NewTool(Action):
 ### Code Quality Tools
 
 #### 🛠️ **Required Tools**
+
 ```bash
 # Format code
 black .
@@ -616,6 +660,7 @@ flake8 src/
 ```
 
 #### ⚙️ **Pre-commit Hooks** (Recommended)
+
 ```yaml
 # .pre-commit-config.yaml
 repos:
@@ -651,8 +696,7 @@ By contributing to this project, you agree that:
 ### Contributor Recognition
 
 All contributors are recognized in:
-- **README.md** contributor section
-- **Release notes** for significant contributions
+
 - **GitHub contributor** statistics
 
 ---
