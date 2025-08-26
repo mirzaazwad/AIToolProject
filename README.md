@@ -857,11 +857,13 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 #### 2. **Integration Tests (21 tests)**
 
 **Smoke Tests by Agent (21 tests):**
+
 - ✅ **Stub Agent Smoke Tests** (7 tests): Core functionality validation without external APIs
 - ✅ **Gemini Agent Smoke Tests** (7 tests): End-to-end testing with Gemini LLM integration
 - ✅ **OpenAI Agent Smoke Tests** (7 tests): End-to-end testing with OpenAI LLM integration
 
 **Test Coverage:**
+
 - ✅ **End-to-End Workflows**: Complete query processing pipelines
 - ✅ **Tool Coordination**: Multi-tool query execution
 - ✅ **API Integration**: External service interaction
