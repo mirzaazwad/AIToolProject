@@ -1,13 +1,15 @@
 """Tests for OpenAI LLM Strategy"""
 
-import pytest
 import os
 from unittest.mock import Mock, patch
+
+import pytest
 from dotenv import load_dotenv
-from src.lib.llm.openai import OpenAIStrategy
-from src.lib.errors.llms.openai import OpenAIError
-from src.data.schemas.tools.tool import ToolPlan
+
 from src.constants.llm import OPENAI_API_URL, OPENAI_MODEL
+from src.data.schemas.tools.tool import ToolPlan
+from src.lib.errors.llms.openai import OpenAIError
+from src.lib.llm.openai import OpenAIStrategy
 
 
 @pytest.mark.usefixtures("openai_fixture")

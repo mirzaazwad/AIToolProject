@@ -3,11 +3,10 @@ Logging system for the agent application.
 Provides specialized loggers for different components.
 """
 
-from .base import BaseLogger
 from .agent_logger import AgentLogger
 from .api_logger import ApiLogger
+from .base import BaseLogger
 from .tool_logger import ToolLogger
-
 
 agent_logger = AgentLogger()
 api_logger = ApiLogger()

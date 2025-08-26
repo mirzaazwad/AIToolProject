@@ -29,6 +29,9 @@ jobs:
       - name: Run tests with coverage
         run: make test
 
+      - name: Run quality checks
+        run: make quality
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:

@@ -1,20 +1,14 @@
 """Stub for Weather Tool"""
 
 from typing import Any, Dict
-from src.data.schemas.tools.weather import (
-    WeatherRequest,
-    WeatherResponse,
-    MainWeatherData,
-    WindData,
-    WeatherCondition,
-    SysData,
-)
+
+from src.data.schemas.tools.weather import (MainWeatherData, SysData,
+                                            WeatherCondition, WeatherRequest,
+                                            WeatherResponse, WindData)
 from src.lib.tools.base import Action
-from tests.utils.constants.weather import (
-    CITY_TEMPERATURE,
-    WEATHER_METADATA,
-    DEFAULT_WEATHER_METADATA,
-)
+from tests.utils.constants.weather import (CITY_TEMPERATURE,
+                                           DEFAULT_WEATHER_METADATA,
+                                           WEATHER_METADATA)
 
 
 class MockWeather(Action):

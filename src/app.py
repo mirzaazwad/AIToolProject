@@ -1,18 +1,18 @@
 """The application startup file"""
 
 import argparse
-import time
-import sys
 import os
+import sys
+import time
 
+from dotenv import load_dotenv
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from .lib.agents.base import Agent
 from .lib.agents.gemini import GeminiAgent
 from .lib.agents.openai import OpenAIAgent
-from dotenv import load_dotenv
-from .lib.loggers import api_logger, tool_logger, agent_logger
-from .lib.agents.base import Agent
+from .lib.loggers import agent_logger, api_logger, tool_logger
 
 
 class Application:
@@ -41,6 +41,8 @@ class Application:
 
     def preprocess_args(self):
         """Preprocess the command line arguments"""
+        if self.parser is None:
+            raise ValueError("Parser not initialized")
         args = self.parser.parse_args()
         self.question = " ".join(args.question).strip()
         self.agent_type = args.agent.lower()
@@ -53,10 +55,15 @@ class Application:
 
         The following tools are available for use:
 
-        1. calculator - for mathematical calculations (args: {"expr": "expression"})
-        2. weather - for weather information (args: {"city": "city_name"})
-        3. knowledge_base - for factual information (args: {"query": "query"})
-        4. currency_converter - for currency conversion (args: {"from": "FROM_CURRENCY", "to": "TO_CURRENCY", "amount": number})
+        1. calculator - for mathematical calculations
+           (args: {"expr": "expression"})
+        2. weather - for weather information
+           (args: {"city": "city_name"})
+        3. knowledge_base - for factual information
+           (args: {"query": "query"})
+        4. currency_converter - for currency conversion
+           (args: {"from": "FROM_CURRENCY", "to": "TO_CURRENCY",
+           "amount": number})
 
         Type 'python main.py -h' for more information.""",
             formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -94,7 +101,8 @@ class Application:
         """Validate the command line arguments"""
         if not self.question:
             print("No question provided. Please ask a question.")
-            print(self.parser.format_help())
+            if self.parser is not None:
+                print(self.parser.format_help())
             exit(1)
 
     def initialize_agent(self):
@@ -110,6 +118,11 @@ class Application:
 
     def run_agent(self) -> tuple[str, float]:
         """Run the agent"""
+        if self.agent is None:
+            raise ValueError("Agent not initialized")
+        if self.question is None:
+            raise ValueError("Question not set")
+
         start_time = time.time()
         answer = self.agent.answer(self.question)
         end_time = time.time()

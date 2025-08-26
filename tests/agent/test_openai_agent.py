@@ -1,15 +1,17 @@
 """Tests for OpenAI Agent"""
 
-import pytest
 import os
 from unittest.mock import patch
+
+import pytest
 from dotenv import load_dotenv
+
+from src.constants.messages import FAILED_AGENT_MESSAGE
+from src.data.schemas.tools.tool import ToolPlan, ToolSuggestion
+from src.data.schemas.tools.tool_response import ToolResponse
 from src.lib.agents.openai import OpenAIAgent
 from src.lib.llm.openai import OpenAIStrategy
 from src.lib.tools.tool_invoker import ToolInvoker
-from src.data.schemas.tools.tool import ToolPlan, ToolSuggestion
-from src.data.schemas.tools.tool_response import ToolResponse
-from src.constants.messages import FAILED_AGENT_MESSAGE
 
 
 @pytest.mark.usefixtures("openai_agent_fixture")

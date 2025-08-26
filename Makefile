@@ -39,6 +39,13 @@ sonar_cloud:
 
 fmt:
 	black .
+	isort .
+	flake8 src/
+
+typecheck:
+	mypy src/ --config-file=mypy.ini
+
+quality: fmt typecheck
 
 
 clean:

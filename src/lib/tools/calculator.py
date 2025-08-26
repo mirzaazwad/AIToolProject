@@ -1,12 +1,8 @@
 """Calculator Tool"""
 
+from ..errors.tools.calculator import (BracketMismatchError, EvaluationError,
+                                       ExpressionError, TokenizationError)
 from .base import Action
-from ..errors.tools.calculator import (
-    ExpressionError,
-    TokenizationError,
-    EvaluationError,
-    BracketMismatchError,
-)
 
 
 class Calculator(Action):
@@ -70,7 +66,7 @@ class Calculator(Action):
                 raise EvaluationError("Modulo by zero")
             return a % b
         if op == "^":
-            return a**b
+            return float(a**b)
         raise EvaluationError(f"Unknown operator: '{op}'")
 
     def _handle_operator(
@@ -98,7 +94,7 @@ class Calculator(Action):
     def _to_postfix(self, tokens: list[str]) -> list[str]:
         """Convert infix tokens to postfix notation using Shunting Yard algorithm."""
         output = []
-        stack = []
+        stack: list[str] = []
 
         precedence = {"+": 1, "-": 1, "*": 2, "/": 2, "%": 2, "^": 3}
         opening = {"(": ")", "{": "}", "[": "]"}

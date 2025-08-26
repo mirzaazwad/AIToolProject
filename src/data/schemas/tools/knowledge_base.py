@@ -1,8 +1,9 @@
 """Schema for Knowledge Base"""
 
-from pydantic import BaseModel, Field, field_validator, ConfigDict
-from typing import Optional
 import json
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class KnowledgeEntry(BaseModel):

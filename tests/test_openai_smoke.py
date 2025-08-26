@@ -1,8 +1,9 @@
 """OpenAI Agent Smoke Tests"""
 
 import pytest
-from src.lib.agents.openai import OpenAIAgent
 from dotenv import load_dotenv
+
+from src.lib.agents.openai import OpenAIAgent
 
 
 @pytest.mark.usefixtures("agent_fixture")

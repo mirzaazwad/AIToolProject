@@ -1,8 +1,10 @@
 """Tests for API Client"""
 
+from unittest.mock import Mock, patch
+
 import pytest
 import requests
-from unittest.mock import Mock, patch
+
 from src.lib.api import ApiClient
 
 

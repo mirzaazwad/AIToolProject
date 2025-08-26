@@ -1,11 +1,13 @@
 """AgentStub that utilizes the StubToolInvoker/StubLLMStrategy"""
 
-from typing import List, Dict, Any
+import re
+from typing import Any, Dict, List
+
+from src.constants.messages import FAILED_AGENT_MESSAGE
 from src.lib.agents.base import Agent
+
 from .llm import StubLLMStrategy
 from .tools.invoker import StubToolInvoker
-from src.constants.messages import FAILED_AGENT_MESSAGE
-import re
 
 
 class AgentStub(Agent):

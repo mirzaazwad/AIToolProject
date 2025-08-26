@@ -1,14 +1,14 @@
 """Tests for Currency Converter Tool"""
 
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
+from src.lib.errors.tools.currency_converter import (ConversionRateError,
+                                                     ConversionRequestError,
+                                                     CurrencyAPIError,
+                                                     InvalidCurrencyError)
 from src.lib.tools.currency_converter import CurrencyConverter
-from src.lib.errors.tools.currency_converter import (
-    CurrencyAPIError,
-    InvalidCurrencyError,
-    ConversionRequestError,
-    ConversionRateError,
-)
 
 
 @pytest.mark.usefixtures("converter_fixture")

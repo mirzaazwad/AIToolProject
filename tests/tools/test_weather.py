@@ -1,14 +1,13 @@
 """Tests for Weather Tool"""
 
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
+from src.lib.errors.tools.weather import (CityNotFoundError, WeatherAPIError,
+                                          WeatherConfigurationError,
+                                          WeatherRequestError)
 from src.lib.tools.weather import Weather
-from src.lib.errors.tools.weather import (
-    WeatherAPIError,
-    CityNotFoundError,
-    WeatherRequestError,
-    WeatherConfigurationError,
-)
 
 
 @pytest.mark.usefixtures("weather_fixture")

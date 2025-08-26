@@ -1,22 +1,20 @@
 """Knowledge Base Tool"""
 
-from .base import Action
-from ...data.schemas.tools.knowledge_base import KnowledgeBase as knowledge_baseSchema
-
-from ..errors.tools.knowledge_base import (
-    RetrievalError,
-    QueryError,
-    InsertionError,
-    LoadingError,
-)
-from ...data.schemas.tools.knowledge_base import KnowledgeEntry
 import os
+from typing import Optional
+
+from ...data.schemas.tools.knowledge_base import \
+    KnowledgeBase as knowledge_baseSchema
+from ...data.schemas.tools.knowledge_base import KnowledgeEntry
+from ..errors.tools.knowledge_base import (InsertionError, LoadingError,
+                                           QueryError, RetrievalError)
+from .base import Action
 
 
 class KnowledgeBase(Action):
     """Knowledge base tool with character-based Jaccard similarity search."""
 
-    def __init__(self, knowledge_base_file_path: str = None):
+    def __init__(self, knowledge_base_file_path: Optional[str] = None):
         """
         Initialize knowledge base.
 
@@ -67,6 +65,8 @@ class KnowledgeBase(Action):
             raise QueryError("Query must be a non-empty string")
         search_result = self.search(query)
         most_relevant_entry = search_result[0]
+        if not most_relevant_entry:
+            raise RetrievalError(f"No entries found for query: '{query}'")
         return most_relevant_entry
 
     def search(
@@ -117,7 +117,7 @@ class KnowledgeBase(Action):
 
         return entries
 
-    def add_entry(self, name: str, summary: str, category: str = None):
+    def add_entry(self, name: str, summary: str, category: Optional[str] = None):
         """
         Add a new entry to the knowledge base.
 

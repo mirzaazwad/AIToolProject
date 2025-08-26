@@ -1,13 +1,15 @@
 """Tests for Gemini LLM Strategy"""
 
-import pytest
 import os
 from unittest.mock import Mock, patch
+
+import pytest
 from dotenv import load_dotenv
-from src.lib.llm.gemini import GeminiStrategy
-from src.lib.errors.llms.gemini import GeminiError
-from src.data.schemas.tools.tool import ToolPlan
+
 from src.constants.llm import GEMINI_API_URL, GEMINI_MODEL
+from src.data.schemas.tools.tool import ToolPlan
+from src.lib.errors.llms.gemini import GeminiError
+from src.lib.llm.gemini import GeminiStrategy
 
 
 @pytest.mark.usefixtures("gemini_fixture")

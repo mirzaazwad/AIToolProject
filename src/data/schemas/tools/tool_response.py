@@ -1,7 +1,8 @@
 """Schema for Tool Response"""
 
-from pydantic import BaseModel, Field
 from typing import Optional, Union
+
+from pydantic import BaseModel, Field
 
 
 class ToolResponse(BaseModel):

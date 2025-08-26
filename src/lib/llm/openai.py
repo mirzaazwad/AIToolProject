@@ -1,12 +1,14 @@
 """Strategy Pattern Application for OpenAI"""
 
-from .base import LLMStrategy
-from ..api import ApiClient
-from ...data.schemas.tools.tool import ToolPlan
-from ...constants.llm import OPENAI_API_URL, OPENAI_MODEL
-from ..errors.llms.openai import OpenAIError
-from os import getenv
 import re
+from os import getenv
+from typing import Optional
+
+from ...constants.llm import OPENAI_API_URL, OPENAI_MODEL
+from ...data.schemas.tools.tool import ToolPlan
+from ..api import ApiClient
+from ..errors.llms.openai import OpenAIError
+from .base import LLMStrategy
 
 
 class OpenAIStrategy(LLMStrategy):
@@ -14,7 +16,9 @@ class OpenAIStrategy(LLMStrategy):
 
     def __init__(self):
         self.apiClient = ApiClient(base_url=OPENAI_API_URL)
-        self.apiClient.set_auth_header(getenv("OPENAI_API_KEY"), "Bearer")
+        api_key = getenv("OPENAI_API_KEY")
+        if api_key:
+            self.apiClient.set_auth_header(api_key, "Bearer")
         self.apiClient.set_default_headers({"Content-Type": "application/json"})
 
     def query(self, prompt: str) -> str:
@@ -43,7 +47,9 @@ class OpenAIStrategy(LLMStrategy):
                 f"Error refining prompt to obtain tool suggestions: {str(e)}"
             )
 
-    def _extract_text_response(self, response_data: dict, default: str = None) -> str:
+    def _extract_text_response(
+        self, response_data: dict, default: Optional[str] = None
+    ) -> str:
         """Extract text from OpenAI-like response JSON."""
         outputs = response_data.get("output", [])
         if not outputs:

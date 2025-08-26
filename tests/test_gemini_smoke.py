@@ -1,8 +1,9 @@
 """Gemini Agent Smoke Tests"""
 
 import pytest
-from src.lib.agents.gemini import GeminiAgent
 from dotenv import load_dotenv
+
+from src.lib.agents.gemini import GeminiAgent
 
 
 @pytest.mark.usefixtures("agent_fixture")
@@ -20,7 +21,6 @@ class TestGeminiSmoke:
         out = self.gemini_agent.answer("Who is Ada Lovelace?")
         assert isinstance(out, str)
         assert len(out) > 10
-        # Accept any reasonable response about Ada Lovelace or failure message
         assert any(
             keyword in out.lower()
             for keyword in [
@@ -59,7 +59,6 @@ class TestGeminiSmoke:
         """Test calculator addition."""
         out = self.gemini_agent.answer("What is 1 + 1?")
         assert isinstance(out, str)
-        # Accept correct answer or failure message
         assert (
             any(answer in out for answer in ["2", "2.0"])
             or "2" in out.replace(".0", "")
@@ -70,7 +69,6 @@ class TestGeminiSmoke:
         """Test percentage calculation."""
         out = self.gemini_agent.answer("What is 12.5% of 243?")
         assert isinstance(out, str)
-        # Accept correct answer or failure message
         assert (
             "30.375" in out
             or "30" in out
@@ -82,7 +80,6 @@ class TestGeminiSmoke:
         out = self.gemini_agent.answer("Summarize today's weather in Paris in 3 words.")
         assert isinstance(out, str)
         assert len(out) > 5
-        # Accept weather-related words or failure message
         assert any(
             word in out.lower()
             for word in [

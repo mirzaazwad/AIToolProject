@@ -1,8 +1,10 @@
 """Tests for Weather Stub Tool"""
 
 import pytest
+
+from tests.utils.constants.weather import (CITY_TEMPERATURE,
+                                           DEFAULT_WEATHER_METADATA)
 from tests.utils.stubs.tools.weather import MockWeather
-from tests.utils.constants.weather import CITY_TEMPERATURE, DEFAULT_WEATHER_METADATA
 
 
 @pytest.mark.usefixtures("weather_fixture")

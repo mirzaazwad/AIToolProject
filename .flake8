@@ -1,0 +1,33 @@
+[flake8]
+max-line-length = 88
+extend-ignore = 
+    # E203: whitespace before ':' (conflicts with black)
+    E203,
+    # W503: line break before binary operator (conflicts with black)
+    W503,
+    # E402: module level import not at top of file (needed for sys.path modification)
+    E402
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    build,
+    dist,
+    *.egg-info,
+    .pytest_cache,
+    .mypy_cache
+per-file-ignores =
+    # Allow imports after sys.path modification in app.py
+    src/app.py:E402
+    # Allow long lines in constants files
+    src/constants/*.py:E501
+    # Allow long lines in schema files (often have long type annotations)
+    src/data/schemas/*.py:E501
+    src/data/schemas/*/*.py:E501
+    # Allow long lines in specific files with complex string formatting
+    src/lib/loggers/api_logger.py:E501
+    src/lib/llm/base.py:E501
+    src/lib/agents/base.py:E501
+    src/lib/tools/knowledge_base.py:E501
+    src/lib/tools/weather.py:E501

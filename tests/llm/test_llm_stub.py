@@ -1,9 +1,10 @@
 """Tests for LLM Stub"""
 
 import pytest
-from tests.utils.stubs.llm import StubLLMStrategy
-from tests.utils.stubs.agent import AgentStub
+
 from src.data.schemas.tools.tool import ToolPlan
+from tests.utils.stubs.agent import AgentStub
+from tests.utils.stubs.llm import StubLLMStrategy
 
 
 @pytest.mark.usefixtures("llm_fixture", "agent_fixture")

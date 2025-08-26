@@ -1,6 +1,7 @@
 """Tests for Calculator Tool"""
 
 import pytest
+
 from src.lib.tools.calculator import Calculator
 
 

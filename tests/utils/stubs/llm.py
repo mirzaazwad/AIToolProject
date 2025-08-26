@@ -3,20 +3,16 @@ StubLLMStrategy Implementation
 Handles Calculator, Weather, KnowledgeBase, CurrencyConverter.
 """
 
-import re
 import math
+import re
 from typing import Optional
-from src.data.schemas.tools.tool import (
-    CalculatorArgs,
-    WeatherArgs,
-    KnowledgeBaseArgs,
-    CurrencyConverterArgs,
-    ToolPlan,
-    ToolSuggestion,
-)
+
+from src.data.schemas.tools.tool import (CalculatorArgs, CurrencyConverterArgs,
+                                         KnowledgeBaseArgs, ToolPlan,
+                                         ToolSuggestion, WeatherArgs)
 from src.lib.llm.base import LLMStrategy
-from tests.utils.constants.weather import CITY_TEMPERATURE
 from tests.utils.constants.calculator import OPERATOR_PATTERNS
+from tests.utils.constants.weather import CITY_TEMPERATURE
 
 
 def safe_eval(expr: str) -> Optional[float]:

@@ -228,7 +228,11 @@ make setup           # Create virtual environment and install dependencies
 make test            # Run all tests with coverage (generates XML report)
 
 # Code Quality
-make fmt             # Format code with black
+make fmt             # Format code with black, isort, and flake8
+make typecheck       # Type check with mypy
+make quality         # Run formatting and type checking
+
+# SonarQube
 make sonar_local     # Run SonarQube analysis locally with docker compose (requires SONAR_TOKEN_LOCAL)
 make sonar_cloud     # Run SonarQube analysis in sonarqube cloud (requires SONAR_TOKEN_CLOUD)
 
@@ -263,6 +267,15 @@ run:
 # Format code
 fmt:
 	black .
+    isort .
+    flake8 src/
+
+# Type check
+typecheck:
+    mypy src/ --config-file=mypy.ini
+
+# Quality check (formatting + type checking)
+quality: fmt typecheck
 
 # Run local SonarQube analysis (requires SONAR_TOKEN_LOCAL)
 make sonar_local
@@ -739,8 +752,14 @@ make test
 # Run the application with example query
 make run
 
-# Format code with black
+# Format code
 make fmt
+
+# Type check
+make typecheck
+
+# Quality check (formatting + type checking)
+make quality
 
 # Run local SonarQube analysis (requires SONAR_TOKEN_LOCAL)
 make sonar_local

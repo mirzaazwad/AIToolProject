@@ -1,8 +1,9 @@
 """Stub Agent Smoke Tests"""
 
 import pytest
-from tests.utils.stubs.agent import AgentStub as Agent
 from dotenv import load_dotenv
+
+from tests.utils.stubs.agent import AgentStub as Agent
 
 
 @pytest.mark.usefixtures("agent_fixture")
@@ -86,6 +87,7 @@ class TestStubSmoke:
         out = self.stub_agent.answer("Convert the average of 10 and 20 USD into EUR.")
         assert isinstance(out, str)
         import re
+
         numbers = re.findall(r"\d+\.?\d*", out)
         if numbers:
             assert float(numbers[0]) > 0

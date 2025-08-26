@@ -1,6 +1,6 @@
-from .base import Agent
 from ..llm.openai import OpenAIStrategy
 from ..tools.tool_invoker import ToolInvoker
+from .base import Agent
 
 
 class OpenAIAgent(Agent):
