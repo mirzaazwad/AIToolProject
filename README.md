@@ -641,7 +641,7 @@ flowchart TD
 
 ## Testing
 
-The system includes a comprehensive test suite with **180 tests achieving 90%+ code coverage** and multiple testing strategies:
+The system includes a comprehensive test suite with **180 tests achieving 80%+ code coverage** and multiple testing strategies:
 
 ### Test Structure
 
@@ -779,7 +779,7 @@ echo $SONAR_TOKEN_CLOUD
 
 - **Token Type**: User Token or Project Analysis Token
 - **Permissions**: Execute Analysis permission on the project
-- **Format**: Alphanumeric string (e.g., `squ_1234567890abcdef1234567890abcdef12345678`)
+- **Format**: Alphanumeric string 
 - **Scope**: Project-level or global analysis permissions
 
 **Getting a SonarQube Token:**
@@ -820,7 +820,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 
 **Quality Gates:**
 
-- ✅ Coverage ≥ 90% (Currently: 90.3%)
+- ✅ Coverage ≥ 80% (Currently: 81.4%)
 - ✅ Maintainability Rating = A
 - ✅ Reliability Rating = A
 - ✅ Security Rating = A
@@ -874,7 +874,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 
 ### Test Quality Metrics
 
-**Overall Coverage**: 90%+ (180 tests)
+**Overall Coverage**: 80%+ (180 tests)
 
 **Test Reliability:**
 
@@ -1212,7 +1212,7 @@ The repository follows a **dual-branch strategy**:
 
 - **Purpose**: Stable, production-ready code
 - **Features**: Core functionality with proven stability
-- **Quality**: All tests passing, 90%+ coverage
+- **Quality**: All tests passing, 80%+ coverage
 - **Deployment**: Ready for production use
 
 #### 🔧 **Improvements Branch**
@@ -1238,7 +1238,7 @@ The repository follows a **dual-branch strategy**:
 - **Documentation**: Comprehensive docstrings and comments
 - **Error Messages**: Clear, actionable error descriptions
 - **Code Organization**: Logical module structure with clear responsibilities
-- **Testing**: 90%+ test coverage with realistic scenarios
+- **Testing**: 80%+ test coverage with realistic scenarios
 - **Cognitive Complexity**: Optimized per SonarQube recommendations
 - **Code Quality**: SonarCloud integration with quality gates
 
@@ -1296,13 +1296,13 @@ SOFTWARE.
 
 This project uses several open-source libraries, each with their own licenses:
 
-| Dependency | License | Purpose |
-|------------|---------|---------|
-| **Pydantic** | MIT License | Data validation and serialization |
-| **Requests** | Apache 2.0 License | HTTP client library |
-| **Python-dotenv** | BSD-3-Clause License | Environment variable management |
-| **Pytest** | MIT License | Testing framework |
-| **Pytest-cov** | MIT License | Coverage reporting |
+| Dependency        | License              | Purpose                           |
+| ----------------- | -------------------- | --------------------------------- |
+| **Pydantic**      | MIT License          | Data validation and serialization |
+| **Requests**      | Apache 2.0 License   | HTTP client library               |
+| **Python-dotenv** | BSD-3-Clause License | Environment variable management   |
+| **Pytest**        | MIT License          | Testing framework                 |
+| **Pytest-cov**    | MIT License          | Coverage reporting                |
 
 All dependencies are compatible with the MIT License and can be used in both commercial and non-commercial projects.
 
