@@ -1,6 +1,6 @@
 # AI Tool-Using Agent System
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AIToolProject&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AIToolProject)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=AIToolProject)](https://sonarcloud.io/summary/new_code?id=AIToolProject)
 
 A robust, extensible AI agent system that can intelligently select and execute tools to answer complex queries. The system combines LLM reasoning with specialized tools for calculations, weather information, knowledge base queries, and currency conversion.
 
