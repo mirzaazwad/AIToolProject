@@ -63,7 +63,7 @@ class CurrencyConverter(Action):
     ) -> float:
         """Extract and validate the converted amount."""
         converted_amount = response.get_converted_amount(request.to_currency)
-        if converted_amount == 0.0:
+        if abs(converted_amount) < 1e-9:
             raise ConversionRateError(
                 f"Conversion rate not found for {request.to_currency}"
             )

@@ -60,11 +60,11 @@ class KnowledgeBase(Action):
             String with summary only or error message
         """
         if "query" not in args:
-            raise QueryError(f"'query' parameter is required for knowledge base search")
+            raise QueryError("'query' parameter is required for knowledge base search")
 
         query = args["query"]
         if not query or not isinstance(query, str):
-            raise QueryError(f"Query must be a non-empty string")
+            raise QueryError("Query must be a non-empty string")
         search_result = self.search(query)
         most_relevant_entry = search_result[0]
         return most_relevant_entry
@@ -84,7 +84,7 @@ class KnowledgeBase(Action):
             Dict with {"entry": name, "summary": summary} or error string
         """
         if not query.strip():
-            raise QueryError(f"Empty query provided")
+            raise QueryError("Empty query provided")
 
         results = self.knowledge_base.search(
             query, threshold=threshold, max_results=max_results
