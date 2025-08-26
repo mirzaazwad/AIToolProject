@@ -131,6 +131,5 @@ class TestGeminiSmoke:
                 assert float(out) > 0
         except (ValueError, IndexError):
             assert any(
-                word in out.lower()
-                for word in ["unable", "sorry", "error", "failed"]
+                word in out.lower() for word in ["unable", "sorry", "error", "failed"]
             )
