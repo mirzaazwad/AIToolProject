@@ -1,6 +1,6 @@
 # AI Tool-Using Agent System
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mirzaazwad_AIToolProject&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=mirzaazwad_AIToolProject)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=AIToolProject&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=AIToolProject)
 
 A robust, extensible AI agent system that can intelligently select and execute tools to answer complex queries. The system combines LLM reasoning with specialized tools for calculations, weather information, knowledge base queries, and currency conversion.
 
@@ -724,16 +724,16 @@ make clean
 
 #### **Complete Makefile Commands Reference**
 
-| Command | Description | Requirements | Output |
-|---------|-------------|--------------|---------|
-| `make setup` | Create virtual environment and install dependencies | Python 3.10+ | `.venv/` directory |
-| `make install` | Install project dependencies | Active Python environment | Installed packages |
-| `make test` | Run full test suite with coverage | pytest, coverage | XML coverage report |
-| `make run` | Execute example query with Gemini agent | API keys (optional for stub) | Query result |
-| `make fmt` | Format code with Black formatter | black package | Formatted Python files |
-| `make sonar_local` | Run local SonarQube analysis | `SONAR_TOKEN_LOCAL`, sonar-scanner | Local SonarQube report |
-| `make sonar_cloud` | Run SonarCloud analysis | `SONAR_TOKEN_CLOUD`, sonar-scanner | SonarCloud report |
-| `make clean` | Remove cache and generated files | None | Clean workspace |
+| Command            | Description                                         | Requirements                       | Output                 |
+| ------------------ | --------------------------------------------------- | ---------------------------------- | ---------------------- |
+| `make setup`       | Create virtual environment and install dependencies | Python 3.10+                       | `.venv/` directory     |
+| `make install`     | Install project dependencies                        | Active Python environment          | Installed packages     |
+| `make test`        | Run full test suite with coverage                   | pytest, coverage                   | XML coverage report    |
+| `make run`         | Execute example query with Gemini agent             | API keys (optional for stub)       | Query result           |
+| `make fmt`         | Format code with Black formatter                    | black package                      | Formatted Python files |
+| `make sonar_local` | Run local SonarQube analysis                        | `SONAR_TOKEN_LOCAL`, sonar-scanner | Local SonarQube report |
+| `make sonar_cloud` | Run SonarCloud analysis                             | `SONAR_TOKEN_CLOUD`, sonar-scanner | SonarCloud report      |
+| `make clean`       | Remove cache and generated files                    | None                               | Clean workspace        |
 
 #### **SonarQube Integration**
 
@@ -826,21 +826,25 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 #### 1. **Unit Tests (159 tests)**
 
 **Agent Tests (32 tests):**
+
 - ✅ **Gemini Agent** (19 tests): Integration testing, tool coordination, error handling
 - ✅ **OpenAI Agent** (13 tests): LLM integration, response processing, logging validation
 
 **LLM Strategy Tests (43 tests):**
+
 - ✅ **Gemini LLM** (20 tests): API integration, response parsing, error scenarios
 - ✅ **OpenAI LLM** (16 tests): Content handling, tool plan generation, edge cases
 - ✅ **LLM Stub** (7 tests): Mock behavior, tool suggestion logic, agent integration
 
 **Tool Tests (64 tests):**
+
 - ✅ **Calculator Tool** (13 tests): Mathematical operations, complex expressions, bracket handling
 - ✅ **Currency Converter** (15 tests): API integration, validation, error scenarios, network failures
 - ✅ **Weather API** (21 tests): Real API integration, city validation, error handling, edge cases
 - ✅ **Weather Stub** (19 tests): Mock behavior, data consistency, fallback scenarios
 
 **Infrastructure Tests (20 tests):**
+
 - ✅ **API Client** (20 tests): HTTP operations, authentication, error handling, logging integration
 
 #### 2. **Integration Tests (7 tests)**
@@ -1166,6 +1170,7 @@ The project includes automated workflows for continuous integration and quality 
 The project has **two GitHub Actions workflows** for different branches:
 
 #### 1. **Main Branch Workflow** (`.github/workflows/main.yml`)
+
 - **Trigger**: Push/PR to `main` branch
 - **Purpose**: Production-ready code validation
 - **Steps**:
@@ -1176,6 +1181,7 @@ The project has **two GitHub Actions workflows** for different branches:
   - SonarCloud quality gate validation
 
 #### 2. **Improvements Branch Workflow** (`.github/workflows/improvements.yml`)
+
 - **Trigger**: Push/PR to `improvements` branch
 - **Purpose**: Development and enhancement validation
 - **Steps**:
@@ -1189,18 +1195,21 @@ The project has **two GitHub Actions workflows** for different branches:
 The repository follows a **dual-branch strategy**:
 
 #### 🌟 **Main Branch**
+
 - **Purpose**: Stable, production-ready code
 - **Features**: Core functionality with proven stability
 - **Quality**: All tests passing, 90%+ coverage
 - **Deployment**: Ready for production use
 
 #### 🔧 **Improvements Branch**
+
 - **Purpose**: Enhanced features and optimizations
 - **Features**: Advanced improvements and experimental features
 - **Quality**: Extended test suite, performance optimizations
 - **Focus**: Demonstrates potential enhancements that could be applied
 
 **Key Improvements in `improvements` branch:**
+
 - ✅ **Enhanced Test Coverage**: 166 tests (vs 90 in main)
 - ✅ **Cognitive Complexity Reduction**: Optimized method complexity per SonarQube recommendations
 - ✅ **Advanced Error Handling**: More robust error scenarios
