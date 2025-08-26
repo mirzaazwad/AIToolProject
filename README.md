@@ -1,23 +1,35 @@
-# AI Tool-Using Agent System
+# 🤖 AI Tool-Using Agent System
 
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=AIToolProject)](https://sonarcloud.io/summary/new_code?id=AIToolProject)
 
 A robust, extensible AI agent system that can intelligently select and execute tools to answer complex queries. The system combines LLM reasoning with specialized tools for calculations, weather information, knowledge base queries, and currency conversion.
 
-## Table of Contents
+## 📋 Table of Contents
 
-- [Architecture Overview](#architecture-overview)
-- [Design Patterns](#design-patterns)
-- [Directory Structure](#directory-structure)
-- [Dependencies](#dependencies)
-- [Environment Setup](#environment-setup)
-- [Usage](#usage)
-- [Available Tools](#available-tools)
-- [Testing](#testing)
-- [Logging & Monitoring](#logging--monitoring)
-- [Solution Approach](#solution-approach)
+- [🏗️ Architecture Overview](#️-architecture-overview)
+- [🎨 Design Patterns](#-design-patterns)
+- [📁 Directory Structure](#-directory-structure)
+- [📦 Dependencies](#-dependencies)
+- [⚙️ Makefile Usage](#️-makefile-usage)
+- [🌍 Environment Setup](#-environment-setup)
+- [🚀 Usage](#-usage)
+- [🛠️ Available Tools](#️-available-tools)
+  - [🧮 Calculator Tool](#-calculator-tool)
+  - [🌤️ Weather Tool](#️-weather-tool)
+  - [📚 Knowledge Base Tool](#-knowledge-base-tool)
+  - [💱 Currency Converter Tool](#-currency-converter-tool)
+  - [🔧 Tool Selection Logic](#-tool-selection-logic)
+- [🧪 Testing](#-testing)
+  - [📊 Test Structure](#-test-structure)
+  - [▶️ Running Tests](#️-running-tests)
+  - [🔍 SonarQube Integration](#-sonarqube-integration)
+  - [📈 Test Categories & Coverage](#-test-categories--coverage)
+- [📝 Logging & Monitoring](#-logging--monitoring)
+- [💡 Solution Approach](#-solution-approach)
+- [🚀 CI/CD & GitHub Actions](#-cicd--github-actions)
+- [📄 License](#-license)
 
-## Architecture Overview
+## 🏗️ Architecture Overview
 
 The system follows a modular, layered architecture with clear separation of concerns:
 
@@ -81,41 +93,41 @@ graph TB
     OpenAILLM --> OpenAIAPI
 ```
 
-## Design Patterns
+## 🎨 Design Patterns
 
 The codebase implements several well-established design patterns:
 
-### 1. **Template Method Pattern**
+### 🏗️ Template Method Pattern
 
 - **Location**: `src/lib/agents/base.py`
 - **Purpose**: Defines the skeleton of the agent workflow while allowing subclasses to override specific steps
 - **Implementation**: The `answer()` method provides a template with hooks for preprocessing, tool execution, and response fusion
 
-### 2. **Strategy Pattern**
+### 🎯 Strategy Pattern
 
 - **Location**: `src/lib/llm/base.py` and implementations
 - **Purpose**: Allows switching between different LLM providers (Gemini, OpenAI) without changing client code
 - **Implementation**: Abstract `LLMStrategy` base class with concrete implementations for each provider
 
-### 3. **Command Pattern**
+### ⚡ Command Pattern
 
 - **Location**: `src/lib/tools/base.py` and `src/lib/tools/tool_invoker.py`
 - **Purpose**: Encapsulates tool execution as objects, enabling parameterization and queuing
 - **Implementation**: `Action` base class for tools, `ToolInvoker` as the invoker
 
-### 4. **Singleton Pattern**
+### 🔒 Singleton Pattern
 
 - **Location**: `src/lib/loggers/base.py`
 - **Purpose**: Ensures single instances of loggers across the application
 - **Implementation**: Metaclass-based singleton for consistent logging
 
-### 5. **Simple Factory Pattern**
+### 🏭 Simple Factory Pattern
 
 - **Location**: `src/app.py`
 - **Purpose**: Centralizes agent creation logic, where agents are instantiated based on user input
 - **Implementation**: Factory method for creating agents based on user input
 
-## Directory Structure
+## 📁 Directory Structure
 
 ```
 ├── main.py                     # CLI entry point
@@ -171,7 +183,7 @@ The codebase implements several well-established design patterns:
     └── test_*.py            # Unit tests for each component
 ```
 
-## Dependencies
+## 📦 Dependencies
 
 The system uses minimal, focused dependencies:
 
@@ -189,7 +201,7 @@ pytest-cov==6.0.0         # Coverage reporting
 typing-extensions==4.14.1  # Enhanced type hints
 ```
 
-### Key Dependency Choices:
+### 🎯 Key Dependency Choices:
 
 - **Pydantic**: Provides robust data validation, serialization, and type safety
 - **Requests**: Simple, reliable HTTP client for external API integration
@@ -197,11 +209,11 @@ typing-extensions==4.14.1  # Enhanced type hints
 - **Pytest**: Comprehensive testing framework with excellent fixture support
 - **Pytest-cov**: Code coverage analysis and reporting
 
-## Makefile Usage
+## ⚙️ Makefile Usage
 
 The project includes a comprehensive Makefile for automated development workflows:
 
-### Available Commands
+### 📋 Available Commands
 
 ```bash
 # Development Setup
@@ -259,14 +271,14 @@ sonar:
 - ✅ **SonarQube Integration**: `make sonar` runs quality analysis
 - ✅ **Example Execution**: `make run` demonstrates application usage
 
-## Environment Setup
+## 🌍 Environment Setup
 
-### Prerequisites
+### 📋 Prerequisites
 
 - Python 3.10+ (recommended)
 - pip package manager
 
-### Installation
+### 💾 Installation
 
 #### **Option 1: Using Makefile (Recommended)**
 
@@ -319,7 +331,7 @@ make setup
    SONAR_TOKEN_CLOUD=your_sonarcloud_token
    ```
 
-### Environment Variables Structure
+### 📊 Environment Variables Structure
 
 | Variable            | Required   | Purpose                     | Example         |
 | ------------------- | ---------- | --------------------------- | --------------- |
@@ -331,7 +343,7 @@ make setup
 
 \*At least one LLM API key is required for full functionality
 
-## Usage
+## 🚀 Usage
 
 ### Command Line Interface
 
@@ -400,11 +412,11 @@ sequenceDiagram
     CLI-->>User: Display result
 ```
 
-## Available Tools
+## 🛠️ Available Tools
 
 The system includes four specialized tools, each designed for specific types of queries:
 
-### 1. **Calculator Tool**
+### 🧮 Calculator Tool
 
 - **Purpose**: Performs mathematical calculations using the Shunting Yard algorithm
 - **Capabilities**:
@@ -414,7 +426,7 @@ The system includes four specialized tools, each designed for specific types of 
 - **Example Usage**: `"What is 12.5% of 243?"` → `30.375`
 - **Implementation**: Custom expression parser with robust error handling
 
-### 2. **Weather Tool**
+### 🌤️ Weather Tool
 
 - **Purpose**: Retrieves current weather information for cities worldwide
 - **API**: OpenWeatherMap API
@@ -425,7 +437,7 @@ The system includes four specialized tools, each designed for specific types of 
 - **Example Usage**: `"What's the weather in Paris?"` → `"Temperature: 15.2°C, Conditions: Partly cloudy"`
 - **Error Handling**: City not found, API failures, network issues
 
-### 3. **Knowledge Base Tool**
+### 📚 Knowledge Base Tool
 
 - **Purpose**: Provides factual information about notable people and topics
 - **Implementation**: Character-based Jaccard similarity search
@@ -604,7 +616,7 @@ This robust search mechanism ensures that users can find information even with i
 - **Simplicity**: Easy to understand and debug
 - **Effectiveness**: High recall with reasonable precision for name matching
 
-### 4. **Currency Converter Tool** _(New Addition)_
+### 💱 Currency Converter Tool _(New Addition)_
 
 - **Purpose**: Converts between different currencies using real-time exchange rates
 - **API**: Frankfurter API (European Central Bank data)
@@ -615,7 +627,7 @@ This robust search mechanism ensures that users can find information even with i
 - **Example Usage**: `"Convert 100 USD to EUR"` → `"85.23"`
 - **Features**: Automatic rate fetching, currency code validation
 
-### Tool Selection Logic
+### 🔧 Tool Selection Logic
 
 The system uses an intelligent tool selection mechanism:
 
@@ -639,11 +651,11 @@ flowchart TD
     J --> K
 ```
 
-## Testing
+## 🧪 Testing
 
 The system includes a comprehensive test suite with **180 tests achieving 80%+ code coverage** and multiple testing strategies:
 
-### Test Structure
+### 📊 Test Structure
 
 ```bash
 tests/
@@ -670,7 +682,7 @@ tests/
     └── tools/                  # Tool stubs and mocks
 ```
 
-### Running Tests
+### ▶️ Running Tests
 
 #### **Using Pytest Directly**
 
@@ -742,7 +754,7 @@ make clean
 | `make sonar_cloud` | Run SonarCloud analysis                             | `SONAR_TOKEN_CLOUD`, sonar-scanner | SonarCloud report      |
 | `make clean`       | Remove cache and generated files                    | None                               | Clean workspace        |
 
-#### **SonarQube Integration**
+#### 🔍 SonarQube Integration
 
 The project integrates with both **local SonarQube** and **SonarCloud** for comprehensive code quality analysis:
 
@@ -779,7 +791,7 @@ echo $SONAR_TOKEN_CLOUD
 
 - **Token Type**: User Token or Project Analysis Token
 - **Permissions**: Execute Analysis permission on the project
-- **Format**: Alphanumeric string 
+- **Format**: Alphanumeric string
 - **Scope**: Project-level or global analysis permissions
 
 **Getting a SonarQube Token:**
@@ -828,7 +840,7 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 - ✅ Technical Debt < 1 hour
 - ✅ Cognitive Complexity optimized (reduced complexity in key methods)
 
-### Test Categories & Coverage
+### 📈 Test Categories & Coverage
 
 #### 1. **Unit Tests (159 tests)**
 
@@ -951,7 +963,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 ```
 
-## Logging & Monitoring
+## 📝 Logging & Monitoring
 
 The system implements a comprehensive logging and monitoring solution:
 
@@ -1067,7 +1079,7 @@ python main.py -v "What is the weather in Tokyo?"
 # Tool calls: 1
 ```
 
-## Solution Approach
+## 💡 Solution Approach
 
 This section details how I approached solving the original assignment requirements:
 
@@ -1180,7 +1192,7 @@ class TranslatorArgs(ToolArgument):
 
 The project includes automated workflows for continuous integration and quality assurance:
 
-### GitHub Actions Workflows
+### ⚡ GitHub Actions Workflows
 
 The project has **two GitHub Actions workflows** for different branches:
 
@@ -1204,7 +1216,7 @@ The project has **two GitHub Actions workflows** for different branches:
   - Code quality checks
   - Performance benchmarking
 
-### Branch Strategy
+### 🌿 Branch Strategy
 
 The repository follows a **dual-branch strategy**:
 
@@ -1232,7 +1244,7 @@ The repository follows a **dual-branch strategy**:
 - ✅ **Extended LLM Support**: Comprehensive OpenAI and Gemini integration
 - ✅ **Enhanced Logging**: Detailed execution metrics
 
-### Quality Assurance
+### ✅ Quality Assurance
 
 - **Type Hints**: Complete type annotation throughout codebase
 - **Documentation**: Comprehensive docstrings and comments
@@ -1306,10 +1318,21 @@ This project uses several open-source libraries, each with their own licenses:
 
 All dependencies are compatible with the MIT License and can be used in both commercial and non-commercial projects.
 
-### Contributing
+### 🤝 Contributing
 
-By contributing to this project, you agree that your contributions will be licensed under the same MIT License that covers the project. See the [Contributing Guidelines](CONTRIBUTING.md) for more details.
+We welcome contributions from the community! By contributing to this project, you agree that your contributions will be licensed under the same MIT License that covers the project.
+
+**For detailed contribution guidelines, please see our [Contributing Guidelines](CONTRIBUTING.md) which covers:**
+
+- 🚀 **Getting Started**: Development setup and prerequisites
+- 🌿 **Branch Strategy**: How to create and manage feature branches
+- 🐛 **Issue Reporting**: Templates and guidelines for reporting bugs
+- 💡 **Feature Requests**: Process for proposing new features
+- 🔧 **Pull Request Process**: Step-by-step PR creation and review
+- 📊 **GitHub Projects**: Task management and assignment workflow
+- 🧪 **Testing Guidelines**: Requirements and best practices
+- 📝 **Code Style**: Formatting and documentation standards
 
 ---
 
-**Note**: This project was developed as part of an educational assignment and demonstrates best practices in software architecture, testing, and quality assurance. While the code is production-ready, it serves primarily as a learning resource and technical demonstration.
+**Note**: ❗ This project was developed as part of an industrial assignment and demonstrates best practices in software architecture, testing, and quality assurance. While the code is production-ready, it serves primarily as a tutorial resource and technical demonstration.
