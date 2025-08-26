@@ -641,7 +641,7 @@ flowchart TD
 
 ## Testing
 
-The system includes a comprehensive test suite with **166 tests achieving 90%+ code coverage** and multiple testing strategies:
+The system includes a comprehensive test suite with **180 tests achieving 90%+ code coverage** and multiple testing strategies:
 
 ### Test Structure
 
@@ -660,7 +660,9 @@ tests/
 │   ├── test_weather.py         # Weather tool tests (21 tests)
 │   └── test_weather_stub.py    # Weather stub tests (19 tests)
 ├── test_api.py                 # API client tests (20 tests)
-├── test_smoke.py               # End-to-end smoke tests (7 tests)
+├── test_stub_smoke.py          # Stub agent smoke tests (7 tests)
+├── test_gemini_smoke.py        # Gemini agent smoke tests (7 tests)
+├── test_openai_smoke.py        # OpenAI agent smoke tests (7 tests)
 ├── constants/                  # Test constants and fixtures
 └── stubs/                      # Test doubles and mocks
     ├── agent.py                # Agent stub for testing
@@ -681,6 +683,11 @@ pytest -v
 
 # Run specific test file
 pytest tests/tools/test_calculator.py
+
+# Run smoke tests for specific agent
+pytest tests/test_stub_smoke.py      # Stub agent smoke tests
+pytest tests/test_gemini_smoke.py    # Gemini agent smoke tests
+pytest tests/test_openai_smoke.py    # OpenAI agent smoke tests
 
 # Run with coverage report
 pytest --cov=src
@@ -847,23 +854,29 @@ sonar.exclusions=**/__pycache__/**,**/logs/**,**/.pytest_cache/**
 
 - ✅ **API Client** (20 tests): HTTP operations, authentication, error handling, logging integration
 
-#### 2. **Integration Tests (7 tests)**
+#### 2. **Integration Tests (21 tests)**
 
+**Smoke Tests by Agent (21 tests):**
+- ✅ **Stub Agent Smoke Tests** (7 tests): Core functionality validation without external APIs
+- ✅ **Gemini Agent Smoke Tests** (7 tests): End-to-end testing with Gemini LLM integration
+- ✅ **OpenAI Agent Smoke Tests** (7 tests): End-to-end testing with OpenAI LLM integration
+
+**Test Coverage:**
 - ✅ **End-to-End Workflows**: Complete query processing pipelines
 - ✅ **Tool Coordination**: Multi-tool query execution
 - ✅ **API Integration**: External service interaction
 - ✅ **Error Recovery**: System resilience testing
-- ✅ **Cross-Agent Compatibility**: Gemini, OpenAI, and Stub agent validation
+- ✅ **Cross-Agent Compatibility**: Comprehensive agent validation
 - ✅ **Real-world Scenarios**: Complex multi-step queries
 - ✅ **Performance Validation**: Response time and accuracy testing
 
 ### Test Quality Metrics
 
-**Overall Coverage**: 90%+ (166 tests)
+**Overall Coverage**: 90%+ (180 tests)
 
 **Test Reliability:**
 
-- **Pass Rate**: 100% (166/166 tests passing)
+- **Pass Rate**: 100% (180/180 tests passing)
 - **Execution Time**: ~90 seconds for full suite
 - **Flaky Tests**: 0 (all tests deterministic)
 - **Mock Coverage**: 100% external dependencies mocked
@@ -1209,7 +1222,8 @@ The repository follows a **dual-branch strategy**:
 
 **Key Improvements in `improvements` branch:**
 
-- ✅ **Enhanced Test Coverage**: 166 tests (vs 90 in main)
+- ✅ **Enhanced Test Coverage**: 180 tests (vs 90 in main)
+- ✅ **Improved Test Segregation**: Split smoke tests by agent type for better isolation
 - ✅ **Cognitive Complexity Reduction**: Optimized method complexity per SonarQube recommendations
 - ✅ **Advanced Error Handling**: More robust error scenarios
 - ✅ **Performance Optimizations**: Improved response times
