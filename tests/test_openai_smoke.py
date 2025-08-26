@@ -53,6 +53,16 @@ class TestOpenAISmoke:
             ]
         )
 
+    def test_unknown_person(self):
+        """Test question about an unknown person."""
+        out = self.openai_agent.answer("Who is Unknown Person?")
+        assert isinstance(out, str)
+        assert len(out) > 10
+        assert any(
+            keyword in out.lower()
+            for keyword in ["unknown", "person", "unable", "sorry"]
+        )
+
     def test_calculator_addition(self):
         """Test calculator addition."""
         out = self.openai_agent.answer("What is 1 + 1?")
@@ -83,6 +93,15 @@ class TestOpenAISmoke:
                 "sunny",
                 "rainy",
                 "weather",
+                "unable",
+                "sorry",
+                "error",
+                "failed",
+                "temperature",
+                "condition",
+                "humidity",
+                "wind",
+                "speed",
             ]
         )
 

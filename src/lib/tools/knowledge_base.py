@@ -64,21 +64,21 @@ class KnowledgeBase(Action):
         if not query or not isinstance(query, str):
             raise QueryError("Query must be a non-empty string")
         search_result = self.search(query)
-        most_relevant_entry = search_result[0]
+        most_relevant_entry = search_result[0] if search_result else None
         if not most_relevant_entry:
             raise RetrievalError(f"No entries found for query: '{query}'")
         return most_relevant_entry
 
     def search(
-        self, query: str, threshold: float = 0.1, max_results: int = 3
+        self, query: str, threshold: float = 0.75, max_results: int = 1
     ) -> list[KnowledgeEntry]:
         """
         Search knowledge base using character-based Jaccard similarity.
 
         Args:
             query: Search query string
-            threshold: Minimum similarity threshold (default: 0.1)
-            max_results: Maximum number of results to return (default: 3)
+            threshold: Minimum similarity threshold (default: 0.75)
+            max_results: Maximum number of results to return (default: 1)
 
         Returns:
             Dict with {"entry": name, "summary": summary} or error string

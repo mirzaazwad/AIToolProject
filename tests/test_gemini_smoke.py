@@ -37,6 +37,16 @@ class TestGeminiSmoke:
             ]
         )
 
+    def test_unknown_person(self):
+        """Test question about an unknown person."""
+        out = self.gemini_agent.answer("Who is Unknown Person?")
+        assert isinstance(out, str)
+        assert len(out) > 10
+        assert any(
+            keyword in out.lower()
+            for keyword in ["unknown", "person", "unable", "sorry"]
+        )
+
     def test_alan_turing(self):
         """Test question about Alan Turing."""
         out = self.gemini_agent.answer("Who is Alan Turing?")
