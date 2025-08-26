@@ -24,3 +24,5 @@ tomli==2.2.1
 typing-inspection==0.4.1
 typing_extensions==4.14.1
 urllib3==2.5.0
+flake8==20.0.4
+mypy==2.1.1
