@@ -1243,3 +1243,73 @@ The repository follows a **dual-branch strategy**:
 - **Code Quality**: SonarCloud integration with quality gates
 
 This solution transforms a fragile prototype into a production-ready system that is robust, extensible, and maintainable while meeting all original requirements and adding significant value through comprehensive monitoring and testing capabilities.
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+```
+MIT License
+
+Copyright (c) 2024 AI Tool-Using Agent System
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### What this means:
+
+- ✅ **Commercial Use**: You can use this software for commercial purposes
+- ✅ **Modification**: You can modify the source code
+- ✅ **Distribution**: You can distribute the software
+- ✅ **Private Use**: You can use the software privately
+- ✅ **Patent Use**: You can use any patents that may be related to the software
+
+### Requirements:
+
+- 📋 **License and Copyright Notice**: Include the original license and copyright notice in any copy of the software
+- 📋 **State Changes**: Document any changes made to the original software (recommended)
+
+### Limitations:
+
+- ❌ **Liability**: The authors are not liable for any damages
+- ❌ **Warranty**: The software is provided "as is" without warranty
+
+### Third-Party Dependencies
+
+This project uses several open-source libraries, each with their own licenses:
+
+| Dependency | License | Purpose |
+|------------|---------|---------|
+| **Pydantic** | MIT License | Data validation and serialization |
+| **Requests** | Apache 2.0 License | HTTP client library |
+| **Python-dotenv** | BSD-3-Clause License | Environment variable management |
+| **Pytest** | MIT License | Testing framework |
+| **Pytest-cov** | MIT License | Coverage reporting |
+
+All dependencies are compatible with the MIT License and can be used in both commercial and non-commercial projects.
+
+### Contributing
+
+By contributing to this project, you agree that your contributions will be licensed under the same MIT License that covers the project. See the [Contributing Guidelines](CONTRIBUTING.md) for more details.
+
+---
+
+**Note**: This project was developed as part of an educational assignment and demonstrates best practices in software architecture, testing, and quality assurance. While the code is production-ready, it serves primarily as a learning resource and technical demonstration.
